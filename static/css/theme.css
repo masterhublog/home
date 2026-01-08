@@ -37,18 +37,13 @@ html {
   --fill: #ffffff;
 }
 
-/* 主题切换相关 CSS */
+
+/* 主题切换按钮 CSS */
 .theme-controls button {
   background: rgba(255,255,255,0.00);
   padding: 6px;
   /*color: var(--main_text_color);*/
   border: 10px solid rgba(255, 255, 255, 0);
-}
-
-/* Removed #theme-name rule - element no longer exists */
-
-/* 按钮上的自定义 tooltip，使用 title 属性作为内容 */
-.theme-controls button {
   position: relative;
 }
 
@@ -153,7 +148,26 @@ html {
 
 /* Theme presets converted from the multiple `html {}` blocks in the original file */
 .theme-1 {
-  --name: "暗夜背景";
+  --name: "原图清晰";
+  --main_bg_color: url(../img/background.webp);
+  --main_text_color: #ffffff;
+  --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
+  --purple_text_color: #a0a0ff;
+  --text_bg_color: #00000040;
+  --item_bg_color: #0000004d;
+  --item_hover_color: #33333366;
+  --item_left_title_color: #ffffff;
+  --item_left_text_color: #cccccc;
+  --footer_text_color: #ffffff;
+  --left_tag_item: #0000002b;
+  --card_filter: 0px;
+  --back_filter: 0px;
+  --back_filter_color: #00000000;
+  --fill: #ffffff;
+}
+
+.theme-2 {
+  --name: "暗调原图";
   --main_bg_color: url(../img/background.webp);
   --main_text_color: #eeeeee;
   --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
@@ -171,7 +185,7 @@ html {
   --fill: #ffffff;
 }
 
-.theme-2 {
+.theme-3 {
   --name: "清新卡片";
   --main_bg_color: url(../img/background.webp);
   --main_text_color: #000000;
@@ -190,45 +204,7 @@ html {
   --fill: #000000;
 }
 
-.theme-3 {
-  --name: "蔚蓝天空";
-  --main_bg_color: linear-gradient(50deg, #a2d1ff, #ffffff);
-  --main_text_color: #000000;
-  --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
-  --purple_text_color: #747bff;
-  --text_bg_color: rgb(196 217 251);
-  --item_bg_color: rgba(249, 250, 251, 0.5);
-  --item_hover_color: rgba(244, 245, 246, 0.8);
-  --item_left_title_color: #000000;
-  --item_left_text_color: #494949;
-  --footer_text_color: #222222;
-  --left_tag_item: linear-gradient(50deg, #a2d1ff, #ffffff);
-  --card_filter: 0px;
-  --back_filter: 0px;
-  --back_filter_color: #00000000;
-  --fill: #000000;
-}
-
 .theme-4 {
-  --name: "纯白简约";
-  --main_bg_color: #ffffff;
-  --main_text_color: #000000;
-  --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
-  --purple_text_color: #747bff;
-  --text_bg_color: rgb(240 243 247);
-  --item_bg_color: rgb(247 247 247);
-  --item_hover_color: rgba(244, 245, 246, 0.5);
-  --item_left_title_color: #000000;
-  --item_left_text_color: #494949;
-  --footer_text_color: #222222;
-  --left_tag_item: #ffffff;
-  --card_filter: 0px;
-  --back_filter: 0px;
-  --back_filter_color: #00000000;
-  --fill: #000000;
-}
-
-.theme-5 {
   --name: "背景模糊";
   --main_bg_color: url(../img/background.webp);
   --main_text_color: #eeeeee;
@@ -247,23 +223,42 @@ html {
   --fill: #ffffff;
 }
 
-.theme-6 {
-  --name: "原图清晰";
-  --main_bg_color: url(../img/background.webp);
-  --main_text_color: #ffffff;
+.theme-5 {
+  --name: "蔚蓝天空";
+  --main_bg_color: linear-gradient(50deg, #a2d1ff, #ffffff);
+  --main_text_color: #000000;
   --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
-  --purple_text_color: #a0a0ff;
-  --text_bg_color: #00000040;
-  --item_bg_color: #0000004d;
-  --item_hover_color: #33333366;
-  --item_left_title_color: #ffffff;
-  --item_left_text_color: #cccccc;
-  --footer_text_color: #ffffff;
-  --left_tag_item: #0000002b;
+  --purple_text_color: #747bff;
+  --text_bg_color: rgb(196 217 251);
+  --item_bg_color: rgba(249, 250, 251, 0.5);
+  --item_hover_color: rgba(244, 245, 246, 0.8);
+  --item_left_title_color: #000000;
+  --item_left_text_color: #494949;
+  --footer_text_color: #222222;
+  --left_tag_item: linear-gradient(50deg, #a2d1ff, #ffffff);
   --card_filter: 0px;
   --back_filter: 0px;
   --back_filter_color: #00000000;
-  --fill: #ffffff;
+  --fill: #000000;
+}
+
+.theme-6 {
+  --name: "纯白简约";
+  --main_bg_color: #ffffff;
+  --main_text_color: #000000;
+  --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
+  --purple_text_color: #747bff;
+  --text_bg_color: rgb(240 243 247);
+  --item_bg_color: rgb(247 247 247);
+  --item_hover_color: rgba(244, 245, 246, 0.5);
+  --item_left_title_color: #000000;
+  --item_left_text_color: #494949;
+  --footer_text_color: #222222;
+  --left_tag_item: #ffffff;
+  --card_filter: 0px;
+  --back_filter: 0px;
+  --back_filter_color: #00000000;
+  --fill: #000000;
 }
 
 .theme-7 {
@@ -283,5 +278,28 @@ html {
   --back_filter: 0px;
   --back_filter_color: #00000000;
   --fill: #ffffff;
+}
+
+.theme-6 .mh-filter {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: transparent;
+}
+
+/* Improve tagline visibility on light themes */
+html.theme-3 .tagline,
+html.theme-4 .tagline {
+  color: #222 !important;
+}
+
+/* 移动端使用 background-wap.webp */
+@media (max-width: 800px) {
+  html,
+  .theme-1,
+  .theme-2,
+  .theme-3,
+  .theme-4 {
+    --main_bg_color: url(../img/background-wap.webp);
+  }
 }
 

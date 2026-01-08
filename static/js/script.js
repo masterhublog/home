@@ -39,10 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var html = document.documentElement;
   var tanChiShe = document.getElementById("tanChiShe");
 
-  // theme classes reordered: theme-6 (原图清晰), theme-1 (暗夜背景), theme-2 (清新卡片), theme-3 (蔚蓝天空), theme-4 (纯白简约), theme-5 (背景模糊), theme-7 (纯黑主题)
-  var themeClasses = ["theme-6", "theme-1", "theme-5", "theme-2", "theme-3", "theme-4", "theme-7"];
-  // human-readable theme names matching the CSS --name variables
-  var themeNames = ["原图清晰", "暗夜背景", "背景模糊", "清新卡片", "蔚蓝天空", "纯白简约", "纯黑主题"];
+  var themeClasses = ["theme-1", "theme-2", "theme-3", "theme-4", "theme-5", "theme-6", "theme-7"];
+  var themeNames = ["原图清晰", "暗调原图", "清新卡片", "背景模糊", "蔚蓝天空", "纯白简约", "纯黑主题"];
+  var themeIcons = ["🖼️", "🔅", "✨", "🌫️", "🌤️", "⚪", "⚫"];
   var themeIndex = parseInt(getCookie("themeIndex"), 10);
   if (isNaN(themeIndex) || themeIndex < 0 || themeIndex >= themeClasses.length) themeIndex = 0;
 
@@ -74,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       var navBtn = document.getElementById("theme-toggle-button");
       var nameForTitle = themeNames[index] || ("主题" + (index + 1));
-      var themeIcons = ['🔍', '🌙', '🌑', '🎨', '🌊', '☀️', '🌚']; // Different icons for each theme
       if (navBtn) {
         navBtn.textContent = themeIcons[index];
         navBtn.setAttribute("data-tooltip", nameForTitle);
@@ -133,15 +131,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // build picker buttons
+  // theme picker buttons
   if (themePicker) {
     themePicker.innerHTML = "";
     themeClasses.forEach(function (c, idx) {
       var b = document.createElement('button');
       b.setAttribute('data-theme-index', idx);
       var label = themeNames[idx] || ('主题' + (idx + 1));
-      // Different icons for each theme
-      var themeIcons = ['🔍', '🌙', '🎨', '🌊', '☀️', '🌑', '🌚'];
       b.setAttribute('aria-label', '选择 ' + label);
       b.setAttribute('data-tooltip', label);
       b.innerHTML = themeIcons[idx] + ' ' + label;
@@ -162,17 +158,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  //pop('./static/img/tz.jpg')
-
   // Mobile Navigation Toggle
   const burger = document.querySelector('.burger');
   const nav = document.querySelector('.nav-links');
   const navLinks = document.querySelectorAll('.nav-links li');
+  const backdrop = document.querySelector('.nav-backdrop');
 
   if (burger && nav) {
     burger.addEventListener('click', () => {
       // Toggle Nav
       nav.classList.toggle('nav-active');
+      document.body.classList.toggle('nav-open');
 
       // Animate Links
       navLinks.forEach((link, index) => {
@@ -186,38 +182,94 @@ document.addEventListener("DOMContentLoaded", function () {
       // Burger Animation
       burger.classList.toggle('toggle');
     });
-  }
-  var descCn = document.getElementById("desc-cn");
-  var descEn = document.getElementById("desc-en");
-  var isDesktopViewport = window.innerWidth >= 800;
-  var textCn = "不忘初心，方得始终.";
-  var textEn = "Stay hungry Stay foolish !";
-  if (descCn && descEn) {
-    var mainTextColor = getComputedStyle(document.documentElement).getPropertyValue("--main_text_color").trim();
-    descCn.style.color = mainTextColor || "";
-    descEn.style.color = mainTextColor || "";
-    if (isDesktopViewport) {
-      var cnIndex = 0, enIndex = 0;
-      descCn.textContent = "";
-      descEn.textContent = "";
-      var cnTimer = setInterval(function() {
-        if (cnIndex < textCn.length) {
-          descCn.textContent += textCn.charAt(cnIndex++);
-        } else {
-          clearInterval(cnTimer);
-          var enTimer = setInterval(function() {
-            if (enIndex < textEn.length) {
-              descEn.textContent += textEn.charAt(enIndex++);
-            } else {
-              clearInterval(enTimer);
-            }
-          }, 50);
-        }
-      }, 50);
-    } else {
-      descCn.textContent = textCn;
-      descEn.textContent = textEn;
+    // Close when clicking backdrop
+    if (backdrop) {
+      backdrop.addEventListener('click', () => {
+        nav.classList.remove('nav-active');
+        document.body.classList.remove('nav-open');
+        burger.classList.remove('toggle');
+        navLinks.forEach((link) => (link.style.animation = ''));
+      });
     }
+    // Close when pressing ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        nav.classList.remove('nav-active');
+        document.body.classList.remove('nav-open');
+        burger.classList.remove('toggle');
+        navLinks.forEach((link) => (link.style.animation = ''));
+      }
+    });
+    // Close after clicking any nav link
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('nav-active');
+        document.body.classList.remove('nav-open');
+        burger.classList.remove('toggle');
+        navLinks.forEach((l) => (l.style.animation = ''));
+      });
+    });
+  }
+  // Motto: （loop print）
+  var mottoEl = document.getElementById("motto");
+  if (mottoEl) {
+    var messages = ["不忘初心，方得始终", "Stay hungry Stay foolish"];
+    var msgIndex = 0;
+    var charIndex = 0;
+    var deleting = false;
+    var pauseTicks = 0;
+    var intervalId = null;
+    var TYPE_DELAY = 60;   // ms per character type
+    var DELETE_DELAY = 40; // ms per character delete
+    var PAUSE_AFTER_COMPLETE = 20; // ticks to pause after completing type/delete
+
+    mottoEl.textContent = "";
+
+    function tick() {
+      if (pauseTicks > 0) {
+        pauseTicks--;
+        return;
+      }
+      var current = messages[msgIndex];
+      if (!deleting) {
+        if (charIndex < current.length) {
+          mottoEl.textContent = current.slice(0, charIndex + 1);
+          charIndex++;
+        } else {
+          deleting = true;
+          pauseTicks = PAUSE_AFTER_COMPLETE;
+        }
+      } else {
+        if (charIndex > 0) {
+          mottoEl.textContent = current.slice(0, charIndex - 1);
+          charIndex--;
+        } else {
+          deleting = false;
+          msgIndex = (msgIndex + 1) % messages.length;
+          pauseTicks = PAUSE_AFTER_COMPLETE;
+        }
+      }
+    }
+
+    function startLoop() {
+      stopLoop();
+      intervalId = setInterval(tick, deleting ? DELETE_DELAY : TYPE_DELAY);
+    }
+    function stopLoop() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+
+    startLoop();
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        stopLoop();
+      } else {
+        startLoop();
+      }
+    });
   }
 });
 

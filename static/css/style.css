@@ -39,7 +39,7 @@ a:focus {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-/* 设置滚动条样式 */
+/* scrollbar */
 ::-webkit-scrollbar {
   width: 0px;
 }
@@ -55,28 +55,6 @@ a:focus {
     --main_bg_color,
     linear-gradient(50deg, #a2d0ff, #ffffff)
   );
-}
-
-html[data-theme="Dark"] {
-  --main_text_color: #fff;
-  --gradient: linear-gradient(
-    120deg,
-    rgb(133, 62, 255),
-    #f76cc6 30%,
-    rgb(255, 255, 255) 60%
-  );
-  --purple_text_color: #747bff;
-  --text_bg_color: rgb(26, 4, 48);
-  --item_bg_color: rgb(19, 20, 24);
-  --item_hover_color: rgb(19, 23, 27);
-  --item_left_title_color: rgb(255, 255, 255);
-  --item_left_text_color: rgb(142, 142, 142);
-  --footer_text_color: #646464;
-  --left_tag_item: linear-gradient(50deg, #1f2327, #000000);
-  --card_filter: 0px;
-  --back_filter: 0px;
-  --back_filter_color: #000000;
-  --fill: #ffffff;
 }
 
 body {
@@ -123,7 +101,7 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* 导航栏基础样式 */
+/* navbar css */
 .navbar {
   position: fixed;
   top: 20px; /* 距离顶部留出间隙，产生悬浮感 */
@@ -153,16 +131,18 @@ body {
   padding: 0 30px;
 }
 
-/* Logo 渐变色文字 */
+/* navbar text */
 .gradientText {
-  font-size: 20px;
   font-weight: bold;
   background: var(--gradient);
   -webkit-background-clip: text;
   color: transparent;
 }
+/* navbar font size */
+.nav-container .gradientText {
+  font-size: 20px;
+}
 
-/* 链接样式 */
 .nav-links {
   display: flex;
   list-style: none;
@@ -186,7 +166,7 @@ body {
   text-shadow: 0 0 10px rgba(116, 123, 255, 0.5);
 }
 
-/* 主题切换按钮 */
+/* navbar theme button */
 .theme-controls {
   display: flex;
   align-items: center;
@@ -226,6 +206,11 @@ body {
   text-decoration: none;
 }
 
+.theme-controls button#theme-toggle-button:hover {
+  color: var(--purple_text_color);
+  text-shadow: 0 0 10px rgba(116, 123, 255, 0.5);
+}
+
 .burger {
   display: none;
   cursor: pointer;
@@ -250,15 +235,6 @@ body {
   transform: rotate(45deg) translate(-5px, -6px);
 }
 
-.theme-controls button#theme-toggle-button:hover {
-  color: var(--purple_text_color);
-  text-shadow: 0 0 10px rgba(116, 123, 255, 0.5);
-}
-
-/* Removed theme-icon styles - element no longer exists */
-
-/* Removed theme-name styles - element no longer exists */
-
 .mh-filter {
   position: fixed;
   width: 100%;
@@ -268,13 +244,6 @@ body {
   -webkit-backdrop-filter: blur(var(--back_filter));
   z-index: -99999999;
   transition: all 0.3s ease;
-}
-
-/* For theme-6 (原图清晰), completely disable the filter */
-.theme-6 .mh-filter {
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  background: transparent;
 }
 
 .mh-main {
@@ -435,6 +404,13 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+@media (min-width: 800px) {
+  .mh-avatar-wap {
+    display: none;
+  }
+}
+
 .tagline {
   font-size: 20px;
   margin-top: 7px;
@@ -452,9 +428,10 @@ body {
 
 .hero-taglines {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   justify-content: center;
+  gap: 8px;
 }
 
 .gradientText {
@@ -465,6 +442,21 @@ body {
   font-family: "title";
   animation: backgroundSizeAnimation 10s ease-in-out infinite;
   background-image: var(--gradient);
+}
+
+.tagline-label {
+  font-size: 18px;
+  color: var(--main_text_color);
+  opacity: 0.8;
+}
+
+.tagline {
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  text-align: center;
+  color: var(--main_text_color);
 }
 
 @keyframes backgroundSizeAnimation {
@@ -562,11 +554,6 @@ body {
   width: 85%;
   max-width: 800px;
   margin: 12px auto;
-}
-@media (min-width: 800px) {
-  .mh-avatar-wap {
-    display: none;
-  }
 }
 
 .tanChiShe img {
@@ -724,6 +711,26 @@ footer {
   bottom: 0;
 }
 
+.nav-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  transition: opacity 0.2s ease;
+}
+
+.nav-open .nav-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 
 @media (max-width: 1150px) {
   .a {
@@ -738,6 +745,9 @@ footer {
 }
 
 @media (max-width: 800px) {
+  body {
+    background-attachment: scroll;
+  }
   .hero-header {
     flex-direction: column;
     gap: 8px;
@@ -751,6 +761,10 @@ footer {
 
   .burger {
     display: block;
+    position: fixed;
+    right: 20px;
+    top: 26px;
+    z-index: 2002;
   }
 
   .nav-links {
@@ -770,7 +784,7 @@ footer {
     gap: 16px;
     transform: translateX(100%);
     transition: transform 0.3s ease;
-    z-index: 1001;
+    z-index: 2001;
   }
 
   .nav-links li {
@@ -779,6 +793,15 @@ footer {
 
   .nav-active li {
     opacity: 1;
+  }
+  .theme-controls {
+    background: var(--item_bg_color);
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 6px 8px;
+    border-radius: 12px;
+  }
+  .theme-controls button#theme-toggle-button {
+    font-size: 16px;
   }
 
   .a .projectItemRight {
@@ -846,15 +869,9 @@ footer {
     display: none;
   }
   .skill img {
-    width: 100%;
-    max-width: 480px;
+    width: 92%;
+    max-width: 360px;
   }
-}
-
-/* Improve tagline visibility on light themes */
-html.theme-3 .tagline,
-html.theme-4 .tagline {
-  color: #222 !important;
 }
 
 .tc {
