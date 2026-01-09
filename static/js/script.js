@@ -153,6 +153,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- 点击背景关闭菜单 ---
+    const navBackdrop = document.querySelector('.nav-backdrop');
+    if (navBackdrop) {
+        navBackdrop.addEventListener('click', () => {
+            UI.nav.classList.remove('nav-active');
+            UI.burger.classList.remove('toggle');
+            document.body.classList.remove('nav-open');
+        });
+    }
+
     // --- 打字机效果 (优化版) ---
     if (UI.motto) {
         const msgs = ["不忘初心，方得始终", "Stay hungry Stay foolish"];

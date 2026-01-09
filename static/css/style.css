@@ -27,6 +27,11 @@
   transition: background-color 0.2s ease;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 a:hover,
 a:link,
 a:visited,
@@ -70,6 +75,7 @@ body {
   background-attachment: fixed;
   transition: color 0.1s ease;
   color: var(--main-text-color);
+  overflow-x: hidden;
 }
 
 #mh-loading {
@@ -690,7 +696,7 @@ footer {
   -webkit-backdrop-filter: blur(2px);
   opacity: 0;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 2000;
   transition: opacity 0.2s ease;
 }
 
@@ -710,6 +716,10 @@ footer {
 @media (max-width: 800px) {
   body {
     background-attachment: scroll;
+  }
+  
+  body.nav-open {
+    overflow: hidden;
   }
 
   .nav-links {
@@ -739,6 +749,9 @@ footer {
     font-size: 18px;
     color: var(--main-text-color);
     border-radius: 8px;
+    position: relative;
+    z-index: 2003;
+    text-decoration: none;
   }
 
   .nav-links li {
@@ -747,6 +760,7 @@ footer {
 
   .nav-active li {
     opacity: 1;
+    animation: navLinkFade 0.3s ease forwards;
   }
 
   .nav-active {
