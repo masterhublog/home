@@ -77,7 +77,7 @@ body {
 }
 
 #mh-loading {
-  background: transparent;
+  background: #fff;
 
   height: 100%;
   width: 100%;
@@ -96,7 +96,7 @@ body {
   height: 40px;
   width: 40px;
   border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.2);
+  border: 10px solid rgba(255, 255, 255, 0.2);
   border-top-color: #472eff;
   animation: spin 0.8s linear infinite;
 }
@@ -157,31 +157,14 @@ body {
   color: var(--main-text-color);
 
   font-family: "title", sans-serif;
-  animation: fluidGradient 10s ease-in-out infinite;
-
   will-change: background-position;
+  animation: mh-kf-fluid-gradient 10s ease-in-out infinite;
 }
 
-@keyframes fluidGradient {
-  0% {
-    background-position: 100%;
-  }
-
-  25% {
-    background-position: 50%;
-  }
-
-  50% {
-    background-position: 0%;
-  }
-
-  75% {
-    background-position: 50%;
-  }
-
-  100% {
-    background-position: 100%;
-  }
+@keyframes mh-kf-fluid-gradient {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 /* mh-nav font size */
@@ -300,7 +283,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.main-container {
+.mh-layout {
   width: 100%;
   margin: 0 auto;
   transition: transform 0.5s ease;
@@ -311,7 +294,7 @@ body {
   padding-top: 60px;
 }
 
-.left-sidebar {
+.mh-sidebar {
   overflow-y: scroll;
   width: 230px;
   height: 100vh;
@@ -324,11 +307,11 @@ body {
   flex-direction: column;
 }
 
-.left-sidebar::-webkit-scrollbar {
+.mh-sidebar::-webkit-scrollbar {
   display: none;
 }
 
-.left-sidebar-avatar {
+.mh-sidebar__avatar {
   flex-shrink: 0;
   width: 90%;
   position: relative;
@@ -342,7 +325,7 @@ body {
   margin-right: auto;
 }
 
-.left-div {
+.mh-sidebar__section {
   flex-shrink: 0;
   width: 100%;
   border-radius: 13px;
@@ -353,13 +336,13 @@ body {
   background: var(--item-bg-color);
 }
 
-.left-des {
+.mh-bio {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.left-des-item {
+.mh-bio__item {
   display: flex;
   align-items: center;
   line-height: 20px;
@@ -368,8 +351,8 @@ body {
   overflow: hidden;
 }
 
-.left-des-item i,
-.left-des-item svg {
+.mh-bio__item i,
+.mh-bio__item svg {
   width: 16px;
   height: 16px;
   fill: var(--fill);
@@ -377,14 +360,14 @@ body {
   margin-right: 10px;
 }
 
-.left-sidebar-tags {
+.mh-tags {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   padding: 14px;
 }
 
-.left-tag-item {
+.mh-tags__item {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -396,43 +379,98 @@ body {
   background: var(--left-tag-item);
 }
 
-#line {
+.mh-timeline__list {
   width: 100%;
   height: 200px;
   font-size: 13px;
   padding-left: 8px;
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
+  list-style: none;
+  scrollbar-width: none;
 }
 
-#line li {
-  list-style: none;
+.mh-timeline__list::-webkit-scrollbar {
+  display: none;
+}
+
+.mh-timeline__item {
   position: relative;
-  padding: 15px 0px 0px 15px;
-  border-left: 2px solid #d5d5d5;
-  border-radius: 0;
-  scroll-snap-align: end;
+  padding: 0 0 20px 20px; /* 顺时针：上 右 下 左 */
+  /* 线条：实线 */
+  border-left: 4px solid rgba(255, 255, 255, 0.15); 
+  scroll-snap-align: start; /* 改为 start 通常滚动体验更好 */
   color: var(--main-text-color);
 }
 
-.focus {
+/* 处理“更多”项：点隐藏，线变透明或虚线 */
+.mh-timeline__item--more {
+  border-left-style: dashed; /* 或者改为 transparent 完全切断 */
+  border-left-color: rgba(213, 213, 213, 0.1);
+}
+
+.mh-timeline__item--more .mh-timeline__dot {
+  display: none;
+}
+
+.mh-timeline__list li:first-child .mh-timeline__dot:first-child {
+  background-color: #aaffcd;
+  animation: mh-timeline__dot 1.8s ease infinite;
+}
+
+.mh-timeline__dot {
   width: 8px;
   height: 8px;
   border-radius: 22px;
   background-color: rgb(255 255 255);
   border: 2px solid #fff;
   position: absolute;
-  left: -5px;
-  top: 50%;
+  left: -6px;
+  top: 6px;
 }
 
-#line li:first-child .focus:first-child {
+.mh-timeline .mh-timeline__list .mh-timeline__item:first-child .mh-timeline__dot {
+  background-color: #09f069 !important;
+  border-color: #09f069 !important;
+  animation: mh-timeline-pulse 1.8s ease infinite;
+}
+
+@keyframes mh-timeline-pulse {
+  0% { box-shadow: 0 0 0 0px rgba(9, 240, 105, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(9, 240, 105, 0); }
+  100% { box-shadow: 0 0 0 0px rgba(9, 240, 105, 0); }
+}
+
+.mh-timeline__info {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--main-text-color);
+  margin-bottom: 2px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+.mh-timeline__item:hover .mh-timeline__info {
+  white-space: normal;
+  overflow: visible;
+}
+
+.mh-timeline__date {
+  font-size: 11px;
+}
+
+.mh-timeline__item:hover .mh-timeline__date {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.mh-timeline__item:hover .mh-timeline__dot {
   background-color: #aaffcd;
-  animation: focus 1.8s ease infinite;
-}
-
-#line::-webkit-scrollbar {
-  display: none;
+  border-color: #aaffcd;
+  box-shadow: 0 0 10px rgba(170, 255, 205, 0.4);
 }
 
 /* main-content */
@@ -841,7 +879,7 @@ footer {
     font-size: 16px;
   }
 
-  .left-sidebar {
+  .mh-sidebar {
     display: none;
   }
 

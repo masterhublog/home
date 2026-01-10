@@ -86,7 +86,7 @@ window.closePop = function() {
     setTimeout(() => {
         UI.tc.classList.remove("active");
         UI.tcImg.src = "";
-    }, 300); // 建议设为 300ms 配合 CSS 动画
+    }, 200);
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // 如果点击的【既不是菜单】且【也不是汉堡按钮】，就关闭
             //if (isMenuOpen && !UI.navBurger.contains(e.target) && !UI.navLinks.contains(e.target))
-            if (isMenuOpen && e.target.closest('.mh-nav__links') && !e.target.closest('.mh-nav__burger')) {
+            if (isMenuOpen &&  !e.target.closest('.mh-nav__burger') || e.target.closest('.mh-nav__links')) {
                 UI.navLinks.classList.remove('nav-active');
                 UI.navBurger.classList.remove('toggle');
                 document.body.classList.remove('nav-open');

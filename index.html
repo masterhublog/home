@@ -52,12 +52,12 @@
 	<!-- ================= background filter ================= -->
 	<div class="mh-bg-filter"></div>
 
-	<div class="main-container">
-		<div class="left-sidebar">
-			<div class="left-sidebar-avatar" style="background-image: url(./static/img/avatar.gif)">
+	<div class="mh-layout">
+		<aside class="mh-sidebar mh-sidebar--left">
+			<div class="mh-sidebar__avatar" style="background-image: url(./static/img/avatar.gif)">
 			</div>
-			<div class="left-div left-des">
-				<div class="left-des-item">
+			<div class="mh-sidebar__section mh-bio">
+				<div class="mh-bio__item">
 					<svg t="1705773709627" class="icon" viewBox="0 0 1024 1024" version="1.1"
 						xmlns="http://www.w3.org/2000/svg" p-id="1478">
 						<path
@@ -68,7 +68,7 @@
 							p-id="1480"></path>
 					</svg>China
 				</div>
-				<div class="left-des-item">
+				<div class="mh-bio__item">
 					<svg t="1705773906032" class="icon" viewBox="0 0 1024 1024" version="1.1"
 						xmlns="http://www.w3.org/2000/svg" p-id="2474">
 						<path
@@ -76,55 +76,54 @@
 							p-id="2475"></path>
 					</svg>Secret
 				</div>
-				<div class="left-des-item">📧 i@masterhu.com.cn</div>
-				<div class="left-des-item">🏷️ Developer · Runner</div>
+				<div class="mh-bio__item">📧 i@masterhu.com.cn</div>
+				<div class="mh-bio__item">🏷️ Full Developer</div>
 			</div>
-			<div class="left-div left-sidebar-tags">
-				<div class="left-tag-item">嵌入式</div>
-				<div class="left-tag-item">linux</div>
-				<div class="left-tag-item">后端</div>
-				<div class="left-tag-item">前端</div>
-				<div class="left-tag-item">C/C++</div>
-				<div class="left-tag-item">骑行</div>
-				<div class="left-tag-item">跑者</div>
-				<div class="left-tag-item">电子竞技</div>
+			<div class="mh-sidebar__section mh-tags">
+				<div class="mh-tags__item">嵌入式</div>
+				<div class="mh-tags__item">linux</div>
+				<div class="mh-tags__item">后端</div>
+				<div class="mh-tags__item">前端</div>
+				<div class="mh-tags__item">C/C++</div>
+				<div class="mh-tags__item">骑行</div>
+				<div class="mh-tags__item">跑者</div>
+				<div class="mh-tags__item">电子竞技</div>
 			</div>
-			<div class="left-div left-sidebar-timeline">
-				<ul id="line">
-					<li>
-						<div class="focus"></div>
-						<div>创建个人主页</div>
-						<div>2026.1</div>
+			<div class="mh-sidebar__section mh-timeline">
+				<ul class="mh-timeline__list">
+					<li class="mh-timeline__item">
+						<div class="mh-timeline__dot"></div>
+						<div class="mh-timeline__info">创建个人主页</div>
+						<div class="mh-timeline__date">2026.1</div>
 					</li>
-					<li>
-						<div class="focus"></div>
-						<div>搭建博客</div>
-						<div>2025.1</div>
+					<li class="mh-timeline__item">
+						<div class="mh-timeline__dot"></div>
+						<div class="mh-timeline__info">搭建博客</div>
+						<div class="mh-timeline__date">2025.1</div>
 					</li>
-					<li>
-						<div class="focus"></div>
-						<div>搭建第一个网站(自用)</div>
-						<div>2024.3</div>
+					<li class="mh-timeline__item">
+						<div class="mh-timeline__dot"></div>
+						<div class="mh-timeline__info">搭建第一个网站(自用)</div>
+						<div class="mh-timeline__date">2024.3</div>
 					</li>
-					<li>
-						<div class="focus"></div>
-						<div>注册域名masterhu.com.cn</div>
-						<div>2024.1</div>
+					<li class="mh-timeline__item">
+						<div class="mh-timeline__dot"></div>
+						<div class="mh-timeline__info">注册域名 masterhu.com.cn</div>
+						<div class="mh-timeline__date">2024.1</div>
 					</li>
-					<li>
-						<div class="focus"></div>
-						<div>...</div>
-						<div>...</div>
+					<li class="mh-timeline__item mh-timeline__item--more">
+						<div class="mh-timeline__dot"></div>
+						<div class="mh-timeline__info">...</div>
+						<div class="mh-timeline__date">...</div>
 					</li>
-					<li>
-						<div class="focus"></div>
-						<div>第一篇博客</div>
-						<div>2020.2</div>
+					<li class="mh-timeline__item">
+						<div class="mh-timeline__dot"></div>
+						<div class="mh-timeline__info">第一篇博客</div>
+						<div class="mh-timeline__date">2020.2</div>
 					</li>
 				</ul>
-
 			</div>
-		</div>
+		</aside>
 		<div class="main-content">
 			<header class="hero-section">
 				<div class="avatar-mobile">
