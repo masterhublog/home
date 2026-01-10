@@ -22,10 +22,10 @@
 		<div id="mh-loading-center"></div>
 	</div>
 	<!-- ================= navba start ================= -->
-	<nav class="navbar">
-		<div class="nav-container">
+	<nav class="mh-nav">
+		<div class="mh-nav__container">
 			<span class="gradient-text">MasterHu's Home</span>
-			<ul class="nav-links">
+			<ul class="mh-nav__links">
 				<li><a href="https://blog.masterhu.com.cn" target="_blank">📖 博客</a></li>
 				<li>
 					<a href="https://blog.masterhu.com.cn/message" target="_blank">💬 留言板</a>
@@ -37,20 +37,22 @@
 					<a href="https://blog.masterhu.com.cn/about" target="_blank">ℹ️ 关于</a>
 				</li>
 				<li>
-					<button class="theme-controls" id="theme-toggle-button" aria-label="切换主题">🎨</button>
+					<button class="mh-nav__theme-toggle" aria-label="切换主题">🎨</button>
 				</li>
 			</ul>
-			<div class="burger" id="burger-menu">
+			<div class="mh-nav__burger" id="burger-menu">
 				<div class="line1"></div>
 				<div class="line2"></div>
 				<div class="line3"></div>
 			</div>
 		</div>
 	</nav>
-	<!-- ================= navbar end ================= -->
-	<div class="mh-filter"></div>
+	<!-- ================= mh-nav end ================= -->
 
-	<div class="mh-main">
+	<!-- ================= background filter ================= -->
+	<div class="mh-bg-filter"></div>
+
+	<div class="main-container">
 		<div class="left-sidebar">
 			<div class="left-sidebar-avatar" style="background-image: url(./static/img/avatar.gif)">
 			</div>
@@ -123,39 +125,39 @@
 
 			</div>
 		</div>
-		<div class="content-wrapper">
-			<header>
+		<div class="main-content">
+			<header class="hero-section">
 				<div class="avatar-mobile">
 					<img src="./static/img/avatar.gif" alt="Avatar" />
 				</div>
 
-				<div class="banner">
-					<div class="greeting">
-						Hello I'm <span class="gradient-text nameText">MasterHu</span>
+				<div class="hero-intro">
+					<div class="hero-greeting">
+						Hello I'm <span class="gradient-text greeting-name">MasterHu</span>
 					</div>
-					<div class="motto" id="motto" aria-label="motto"></div>
+					<div class="hero-motto" id="hero-motto" aria-label="motto"> </div>
 				</div>
 
-				<div class="connect-me">
-					<a class="connect-me-item" onclick="" href="https://github.com/masterhublog" target="_blank">
-						<svg t="1704870335945" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-							p-id="2487">
+				<div class="hero-actions">
+					<a class="hero-actions-item" onclick="" href="https://github.com/masterhublog" target="_blank">
+						<svg t="1704870335945" class="icon" viewBox="0 0 1024 1024" version="1.1"
+							xmlns="http://www.w3.org/2000/svg" p-id="2487">
 							<path
 								d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9 23.5 23.2 38.1 55.4 38.1 91v112.5c0.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"
 								p-id="2488"></path>
 						</svg>
-						<div class="connect-me-item-tip">Github</div>
+						<div class="hero-actions-item-tip">Github</div>
 					</a>
-					<a class="connect-me-item" onclick="" href="mailto:i@masterhu.com.cn">
+					<a class="hero-actions-item" onclick="" href="mailto:i@masterhu.com.cn">
 						<svg t="1704870588438" class="icon" viewBox="0 0 1024 1024" version="1.1"
 							xmlns="http://www.w3.org/2000/svg" p-id="3174">
 							<path
 								d="M926.47619 355.644952V780.190476a73.142857 73.142857 0 0 1-73.142857 73.142857H170.666667a73.142857 73.142857 0 0 1-73.142857-73.142857V355.644952l304.103619 257.828572a170.666667 170.666667 0 0 0 220.745142 0L926.47619 355.644952zM853.333333 170.666667a74.044952 74.044952 0 0 1 26.087619 4.778666 72.704 72.704 0 0 1 30.622477 22.186667 73.508571 73.508571 0 0 1 10.678857 17.67619c3.169524 7.509333 5.12 15.652571 5.607619 24.210286L926.47619 243.809524v24.380952L559.469714 581.241905a73.142857 73.142857 0 0 1-91.306666 2.901333l-3.632762-2.925714L97.52381 268.190476v-24.380952a72.899048 72.899048 0 0 1 40.155428-65.292191A72.97219 72.97219 0 0 1 170.666667 170.666667h682.666666z"
 								p-id="3175"></path>
 						</svg>
-						<div class="connect-me-item-tip">Mail</div>
+						<div class="hero-actions-item-tip">Mail</div>
 					</a>
-					<a class="connect-me-item" onclick="pop('./static/img/reward.webp')" href="javascript:void(0)">
+					<a class="hero-actions-item" onclick="pop('./static/img/reward.webp')" href="javascript:void(0)">
 						<svg t="1705247464964" class="icon" viewBox="0 0 1024 1024" version="1.1"
 							xmlns="http://www.w3.org/2000/svg" p-id="4987">
 							<path
@@ -168,7 +170,7 @@
 								d="M683.431724 427.431724v-70.62069h-38.311724l30.190345-30.190344-49.964138-49.964138-62.49931 62.49931h-6.002759L494.344828 276.656552l-49.787587 49.964138 30.013793 30.190344h-38.311724v70.62069h88.275862v35.310345h-88.275862v70.62069h88.275862v52.965517h70.62069v-52.965517h88.275862v-70.62069h-88.275862v-35.310345z"
 								p-id="4990"></path>
 						</svg>
-						<div class="connect-me-item-tip">赞助</div>
+						<div class="hero-actions-item-tip sponsor-link">赞助</div>
 					</a>
 				</div>
 
@@ -177,8 +179,8 @@
 				</div>
 			</header>
 
-			<content>
-				<div class="title">
+			<content class="mh-shelf">
+				<div class="mh-shelf-title">
 					<svg t="1705257422086" class="icon" viewBox="0 0 1024 1024" version="1.1"
 						xmlns="http://www.w3.org/2000/svg" p-id="1891">
 						<path
@@ -187,45 +189,45 @@
 					</svg>site
 				</div>
 
-				<div class="site-card-list">
-					<a class="site-card-item target="_blank" href="https://blog.masterhu.com.cn">
-						<div class="site-card-info">
-							<h1>📖博客</h1>
+				<div class="mh-site-grid">
+					<a class="mh-site-card" target="_blank" href="https://blog.masterhu.com.cn">
+						<div class="mh-site-card__body">
+							<h3>📖博客</h3>
 							<p>📝记录&分享<br> The Joy of Sharing</p>
 						</div>
-						<div class="site-card-img">
+						<div class="mh-site-card__icon">
 							<img src="./static/svg/blog.svg" alt="Blog Icon" />
 						</div>
 					</a>
-					<a class="site-card-item" target="_blank" href="https://blog.masterhu.com.cn/message">
-						<div class="site-card-info">
-							<h1>💬 留言板</h1>
+					<a class="mh-site-card" target="_blank" href="https://blog.masterhu.com.cn/message">
+						<div class="mh-site-card__body">
+							<h3>💬 留言板</h3>
 							<p>🤙 来聊聊呗。。。</p>
 						</div>
-						<div class="site-card-img">
-							<img src="./static/svg/message.svg" alt="Message Board" />
+						<div class="mh-site-card__icon">
+							<img src="./static/svg/message.svg" alt="Message Icon" />
 						</div>
 					</a>
-					<a class="site-card-item" target="_blank" href="https://blog.masterhu.com.cn/friends">
-						<div class="site-card-info">
-							<h1>🤝 友情链接</h1>
+					<a class="mh-site-card" target="_blank" href="https://blog.masterhu.com.cn/friends">
+						<div class="mh-site-card__body">
+							<h3>🤝 友情链接</h3>
 							<p>👥 小伙伴们</p>
 						</div>
-						<div class="site-card-img">
+						<div class="mh-site-card__icon">
 							<img src="./static/svg/friends.svg" alt="Friends" />
 						</div>
 					</a>
-					<a class="site-card-item" target="_blank" href="https://blog.masterhu.com.cn/about">
-						<div class="site-card-info">
-							<h1>ℹ️ 关于</h1>
+					<a class="mh-site-card" target="_blank" href="https://blog.masterhu.com.cn/about">
+						<div class="mh-site-card__body">
+							<h3>ℹ️ 关于</h3>
 							<p>👨‍💻 了解更多</p>
 						</div>
-						<div class="site-card-img">
+						<div class="mh-site-card__icon">
 							<img src="./static/svg/about.svg" alt="About" />
 						</div>
 					</a>
 				</div>
-				<div class="title">
+				<div class="mh-shelf-title">
 					<svg t="1705257422086" class="icon" viewBox="0 0 1024 1024" version="1.1"
 						xmlns="http://www.w3.org/2000/svg" p-id="1891">
 						<path
@@ -234,19 +236,19 @@
 					</svg>project
 				</div>
 
-				<div class="prj-card-list">
-					<a class="prj-card-item target="_blank" href="https://blog.masterhu.com.cn">
-						<div class="prj-card-info">
-							<h1>📖博客</h1>
+				<div class="mh-prj-grid">
+					<a class="mh-prj-card" target="_blank" href="https://blog.masterhu.com.cn">
+						<div class="mh-prj-card__body">
+							<h3>📖博客</h3>
 							<p>📝记录&分享<br> The Joy of Sharing</p>
 						</div>
-						<div class="prj-card-img">
+						<div class="mh-prj-card__icon">
 							<img src="./static/svg/blog.svg" alt="" />
 						</div>
 					</a>
 				</div>
 
-				<div class="title">
+				<div class="mh-shelf-title">
 					<svg t="1705257823317" class="icon" viewBox="0 0 1024 1024" version="1.1"
 						xmlns="http://www.w3.org/2000/svg" p-id="7833">
 						<path
@@ -262,7 +264,7 @@
 					<img id="skill-mobile"
 						src="https://skillicons.dev/icons?i=html,css,js,ts,react,vue,nodejs,python,go,c,cpp,linux,docker,git,github,postman,vscode,markdown,photoshop,bash&perline=8"
 						alt="" srcset="" />
-					</div>
+				</div>
 			</content>
 		</div>
 	</div>
@@ -283,4 +285,5 @@
 <script>
 	LA.init({ id: "KFqltKSkJgQTGD9l", ck: "KFqltKSkJgQTGD9l" });
 </script>
+
 </html>

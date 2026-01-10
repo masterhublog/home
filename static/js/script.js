@@ -89,60 +89,69 @@ window.closePop = function() {
     }, 300); // 建议设为 300ms 配合 CSS 动画
 };
 
-/* --- 5. 主程序入口 --- */
 document.addEventListener("DOMContentLoaded", () => {
-    // 初始化 DOM 缓存池
     UI = {
         html: document.documentElement,
         tc: document.querySelector(".tc"),
         tcMain: document.querySelector(".tc-main"),
         tcImg: document.querySelector(".tc-img"),
         snakeImg: document.getElementById("snake-img"),
-        motto: document.getElementById("motto"),
-        navThemeBtn: document.getElementById("theme-toggle-button"),
-        burger: document.querySelector('.burger'),
-        nav: document.querySelector('.nav-links'),
+        heroMotto: document.getElementById("hero-motto"),
+        
+        navBurger: document.querySelector('.mh-nav__burger'),
+        navLinks: document.querySelector('.mh-nav__links'),
+        navThemeBtn: document.querySelector(".mh-nav__theme-toggle"),
         loading: document.querySelector("#mh-loading")
     };
 
     let currentThemeIdx = parseInt(Storage.get("themeIndex")) || 0;
     currentThemeIdx = applyTheme(currentThemeIdx);
 
-    // 主题切换点击
     UI.navThemeBtn?.addEventListener("click", (e) => {
         currentThemeIdx = applyTheme(currentThemeIdx + 1);
     });
 
     // --- 移动端菜单 ---
-    if (UI.burger) {
-        UI.burger.addEventListener('click', () => {
-            UI.nav.classList.toggle('nav-active');
-            UI.burger.classList.toggle('toggle');
-            document.body.classList.toggle('nav-open');
+    UI.navBurger?.addEventListener('click', () => {
+        UI.navLinks.classList.toggle('nav-active');
+        UI.navBurger.classList.toggle('toggle');
+        document.body.classList.toggle('nav-open');
+    });
+
+    if (UI.navBurger) {
+        document.addEventListener('click', (e) => {
+            const isMenuOpen = UI.navLinks.classList.contains('nav-active');
+
+            // 如果点击的【既不是菜单】且【也不是汉堡按钮】，就关闭
+            //if (isMenuOpen && !UI.navBurger.contains(e.target) && !UI.navLinks.contains(e.target))
+            if (isMenuOpen && e.target.closest('.mh-nav__links') && !e.target.closest('.mh-nav__burger')) {
+                UI.navLinks.classList.remove('nav-active');
+                UI.navBurger.classList.remove('toggle');
+                document.body.classList.remove('nav-open');
+            }
         });
     }
 
-    // --- 打字机效果 (优化版) ---
-    if (UI.motto) {
-        const msgs = ["不忘初心，方得始终", "Stay hungry Stay foolish"];
+    // --- 打字机效果 ---
+    if (UI.heroMotto) {
+        const msgs = ["不忘初心，方得始终!", "Stay hungry Stay foolish!"];
         let msgIdx = 0, charIdx = 0, isDeleting = false, pause = 0;
-
         const typeTick = () => {
             if (pause > 0) { pause--; return; }
 
             const current = msgs[msgIdx];
             if (!isDeleting) {
-                UI.motto.textContent = current.slice(0, ++charIdx);
+                UI.heroMotto.textContent = current.slice(0, ++charIdx);
                 if (charIdx === current.length) { isDeleting = true; pause = 20; }
             } else {
-                UI.motto.textContent = current.slice(0, --charIdx);
+                UI.heroMotto.textContent = current.slice(0, --charIdx);
                 if (charIdx === 0) { isDeleting = false; msgIdx = (msgIdx + 1) % msgs.length; pause = 10; }
             }
         };
         
-        let mottoTimer = setInterval(typeTick, 80);
+        let heroMottoTimer = setInterval(typeTick, 80);
         document.addEventListener("visibilitychange", () => {
-            document.hidden ? clearInterval(mottoTimer) : mottoTimer = setInterval(typeTick, 80);
+            document.hidden ? clearInterval(heroMottoTimer) : heroMottoTimer = setInterval(typeTick, 80);
         });
     }
 
@@ -150,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     UI.tc?.addEventListener("click", (e) => {
         if (e.target === UI.tc) closePop();
     });
+
 });
 
 // 加载遮罩消失

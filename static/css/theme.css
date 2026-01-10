@@ -171,15 +171,15 @@ html {
   --fill: #ffffff;
 }
 
-.theme-6 .mh-filter {
+.theme-6 .mh-bg-filter {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   background: transparent;
 }
 
-/* Improve motto visibility on light themes */
-html.theme-3 .motto,
-html.theme-4 .motto {
+/* Improve hero-motto visibility on light themes */
+html.theme-3 .hero-motto,
+html.theme-4 .hero-motto {
   color: #222 !important;
 }
 
