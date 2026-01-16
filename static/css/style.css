@@ -8,7 +8,7 @@
 @font-face {
   font-family: "a";
   /*中文字体*/
-  src: url();
+  src: url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap");
   font-display: swap;
 }
 
@@ -120,7 +120,9 @@ body {
       var(--purple-text-color)
     );
 
-  animation: mh-spin 1s linear infinite;
+animation:
+    mh-spin 1s linear infinite,
+    mh-progress 2.5s ease-in-out infinite;
 }
 
 /* 中心镂空 */
@@ -137,12 +139,6 @@ body {
   to {
     transform: rotate(360deg);
   }
-}
-
-.mh-loading-spinner {
-  animation:
-    mh-spin 1s linear infinite,
-    mh-progress 2.5s ease-in-out infinite;
 }
 
 @keyframes mh-progress {
@@ -356,7 +352,7 @@ body {
   display: none;
 }
 
-.mh-sidebar__avatar {
+.mh-avatar {
   flex-shrink: 0;
   width: 90%;
   position: relative;

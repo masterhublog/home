@@ -43,6 +43,11 @@ homepage/
 
 ## 🚀 快速开始
 
+### 前置要求
+
+- 现代浏览器（Chrome、Firefox、Safari、Edge）
+- 可选：本地 HTTP 服务器（Python、Node.js 等）
+
 ### 克隆仓库
 
 ```bash
@@ -52,22 +57,59 @@ cd homepage
 
 ### 本地预览
 
-**方式一：直接打开**
+#### 方式一：直接打开（不推荐）
 ```bash
-# 双击 index.html 在浏览器中打开
+# 直接双击 index.html 在浏览器中打开
+# 注意：可能存在跨域资源加载问题
 ```
 
-**方式二：使用 Python 本地服务器（推荐）**
+#### 方式二：使用 Python 本地服务器（推荐）
+
+**Python 3.x:**
 ```bash
 python -m http.server 8000
 # 访问 http://localhost:8000
 ```
 
-**方式三：使用 VS Code Live Server**
+**Python 2.x:**
 ```bash
-# 安装 Live Server 插件后
-# 右键 index.html → Open with Live Server
+python -m SimpleHTTPServer 8000
+# 访问 http://localhost:8000
 ```
+
+#### 方式三：使用 Node.js 服务器
+
+**安装 serve:**
+```bash
+npm install -g serve
+```
+
+**启动服务:**
+```bash
+serve -s . -l 8000
+# 访问 http://localhost:8000
+```
+
+#### 方式四：使用 VS Code Live Server
+
+1. 安装 [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) 插件
+2. 右键 `index.html` → **Open with Live Server**
+3. 自动在浏览器中打开
+
+#### 方式五：使用 PHP 服务器
+
+```bash
+php -S localhost:8000
+# 访问 http://localhost:8000
+```
+
+### 验证安装
+
+访问主页后，你应该能看到：
+- 左侧个人信息和时间线
+- 右侧欢迎界面和个人链接
+- 主题切换功能
+- 响应式布局（调整浏览器窗口大小测试）
 
 ## 🔧 自定义配置
 
@@ -144,9 +186,28 @@ vercel
 
 ## 🛠️ 技术栈
 
-- **HTML5** - 语义化页面结构
-- **CSS3** - 现代样式与动画效果
-- **JavaScript (ES6)** - 原生 DOM 操作与交互
+### 前端技术
+- **HTML5** - 语义化页面结构，支持现代浏览器特性
+- **CSS3** - 现代样式与动画效果，包含：
+  - Flexbox & Grid 布局
+  - CSS 变量与主题系统
+  - 毛玻璃效果（backdrop-filter）
+  - 响应式媒体查询
+- **JavaScript (ES6+)** - 原生 DOM 操作与交互，包含：
+  - 模块化代码结构
+  - LocalStorage 主题持久化
+  - 打字机动画效果
+  - 移动端手势支持
+
+### 外部资源
+- **Google Fonts** - 字体服务
+- **Skillicons.dev** - 技能图标生成
+- **WebLive2D** - 可选的看板娘组件
+
+### 开发工具
+- 零构建配置，无需 Webpack、Vite 等构建工具
+- 支持任何静态文件服务器
+- 兼容所有主流代码编辑器
 
 ## 📋 浏览器兼容性
 

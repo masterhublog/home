@@ -92,9 +92,16 @@
     white-space: nowrap;
   }
 
-  .nav-active li {
+.nav-active li {
     opacity: 1;
     animation: navLinkFade 0.3s ease forwards;
+  }
+
+  .nav-links.nav-active {
+    opacity: 1;
+    transform: translateY(10px) scale(1) !important;
+    /* 向下偏移一点，形成悬浮感 */
+    pointer-events: auto;
   }
 
   .nav-active {
