@@ -20,10 +20,18 @@ console.log("%c    '---''(_/--'  `-'\\_)", CAT_STYLE);
 /* Storage Utility (LocalStorage Wrapper) */
 const Storage = {
   set(key, value) {
-    localStorage.setItem(key, value);
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.warn("LocalStorage access denied", e);
+    }
   },
   get(key) {
-    return localStorage.getItem(key);
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      return null;
+    }
   }
 };
 
@@ -69,10 +77,40 @@ const SITE_CONFIG = {
  * ========================================================================= */
 
 (function () {
+  /* UI Cache */
+  let UI = {};
+
+  /**
+   * Caches DOM elements to avoid repeated queries.
+   * 缓存 DOM 元素，减少重复查询
+   */
+  function cacheUI() {
+    UI = {
+      html: document.documentElement,
+      loading: document.querySelector(".mh-loading"),
+
+      navBurger: document.querySelector(".nav-burger"),
+      navLinks: document.querySelector(".nav-links"),
+      themeButton: document.querySelector(".nav-theme-toggle"),
+
+      modal: document.querySelector(".mh-modal"),
+      modalMain: document.querySelector(".modal-main"),
+      modalImage: document.querySelector(".modal-img"),
+      modalStack: document.querySelector(".modal-stack"),
+      // Stack logic
+      modalStackItems: null,
+      modalStackShow: null,
+      modalStackIndex: 0,
+
+      heroMotto: document.getElementById("hero-motto"),
+      snakeImage: document.getElementById("snake-img")
+    };
+  }
+
   /* Uptime Counter | 站点运行时间计数器 */
   /**
-   * Calculates and displays the site's uptime.
-   * 计算站点运行时间并更新 DOM
+   * Calculates and updates the site's running time.
+   * 计算并更新站点运行时间
    */
   function updateSiteUptime() {
     const start = new Date(SITE_CONFIG.BIRTH_TIME).getTime();
@@ -95,7 +133,7 @@ const SITE_CONFIG = {
     const years = Math.floor(days / 365);
     const remainingDays = days % 365;
 
-    const pad = (n) => String(n).padStart(2, '0');
+    const pad = (n) => String(n).padStart(2, "0");
     const yearDayPart = years > 0
       ? `${years}年${remainingDays}天`
       : `${days}天`;
@@ -105,59 +143,23 @@ const SITE_CONFIG = {
     el.innerHTML = `已运行 ${yearDayPart}<br>${timePart}`;
   }
 
-  setInterval(updateSiteUptime, 1000);
-  updateSiteUptime();
-
-  /**
-   * Updates the daily visitor count using localStorage.
-   * 基于 localStorage 的简单日访客计数器
-   */
-  function updateTodayVisitors() {
-    const el = document.getElementById(SITE_CONFIG.TODAY_VISITORS_ID);
-    if (!el) return;
-
-    const key = "MH_TODAY_VISIT";
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    const todayStr = `${yyyy}-${mm}-${dd}`;
-
-    let data;
-    try {
-      data = JSON.parse(localStorage.getItem(key) || "{}");
-    } catch {
-      data = {};
-    }
-
-    if (!data || data.date !== todayStr) {
-      data = { date: todayStr, count: 0 };
-    }
-
-    data.count += 1;
-    localStorage.setItem(key, JSON.stringify(data));
-
-    el.textContent = data.count;
-  }
-
-
   /*  Determine whether a color is visually dark */
   /**
-   * Checks if a color string is visually dark.
-   * 判断颜色是否为深色，用于调整文字或图标颜色
+   * Determines if a color is visually dark to adjust contrast.
+   * 判断颜色是否为深色，用于调整对比度
    * @param {string} color - Hex or RGB color string
-   * @returns {boolean}
+   * @returns {boolean} True if dark, false otherwise
    */
   function isDarkColor(color) {
     if (!color) return false;
 
     let r, g, b;
-    if (color.startsWith('#')) {
+    if (color.startsWith("#")) {
       let hex = color.slice(1);
-      if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
-      r = parseInt(hex.substr(0, 2), 16);
-      g = parseInt(hex.substr(2, 2), 16);
-      b = parseInt(hex.substr(4, 2), 16);
+      if (hex.length === 3) hex = hex.split("").map(x => x + x).join("");
+      r = parseInt(hex.slice(0, 2), 16);
+      g = parseInt(hex.slice(2, 4), 16);
+      b = parseInt(hex.slice(4, 6), 16);
     } else {
       const rgb = color.match(/\d+/g);
       if (!rgb) return false;
@@ -170,11 +172,8 @@ const SITE_CONFIG = {
   /**
    * Apply theme by index
    * 切换主题核心逻辑
-   * - Switch html class (切换 HTML 类名)
-   * - Sync UI icon & tooltip (同步图标和提示)
-   * - Persist index (持久化存储)
-   * @param {number} index - Theme index in configuration
-   * @returns {number} Safe index applied
+   * @param {number} index - Theme index
+   * @returns {number} The safe index applied
    */
   function applyTheme(index) {
     const total = THEME_CONFIG.classes.length;
@@ -184,7 +183,7 @@ const SITE_CONFIG = {
     THEME_CONFIG.classes.forEach(cls => html.classList.remove(cls));
     html.classList.add(THEME_CONFIG.classes[safeIndex]);
 
-    Storage.set("themeIndex", safeIndex);
+    Storage.set("MH_THEME_INDEX", safeIndex);
 
     if (UI.themeButton) {
       const name = THEME_CONFIG.names[safeIndex];
@@ -204,72 +203,153 @@ const SITE_CONFIG = {
     return safeIndex;
   }
 
+  /* Modal Logic */
   /**
-   * Opens the image modal.
-   * 打开图片模态框
-   * @param {string} imgUrl
+   * Opens the modal with the specified image.
+   * 打开模态框
+   * @param {string} imgUrl - URL of the image to display
    */
-  window.openModal = function (imgUrl) {
+  function openModal(imgUrl) {
     if (!UI.modal) return;
-    UI.modalImage.src = imgUrl;
+    
+    // Update main image
+    if (UI.modalImage && imgUrl) {
+      UI.modalImage.src = imgUrl;
+    }
+
+    // Reset stack if exists
     if (UI.modalStackShow) {
       UI.modalStackIndex = 0;
       UI.modalStackShow(0);
     }
+
     UI.modal.classList.add("active");
+    UI.modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
-    setTimeout(() => UI.modalMain.classList.add("active"), 100);
-  };
+    
+    // Animation delay
+    setTimeout(() => {
+        if(UI.modalMain) UI.modalMain.classList.add("active");
+    }, 100);
+  }
 
   /**
-   * Closes the image modal.
-   * 关闭图片模态框
+   * Closes the modal.
+   * 关闭模态框
    */
-  window.closeModal = function () {
+  function closeModal() {
     if (!UI.modal) return;
-    UI.modalMain.classList.remove("active");
+    
+    if (UI.modalMain) UI.modalMain.classList.remove("active");
+    
     setTimeout(() => {
       UI.modal.classList.remove("active");
-      UI.modalImage.src = "";
+      UI.modal.setAttribute("aria-hidden", "true");
+      if (UI.modalImage) UI.modalImage.src = "";
       document.body.classList.remove("modal-open");
     }, 200);
-  };
-
-  /*  UI Cache */
-  let UI = {};
+  }
 
   /**
-   * Caches DOM elements to avoid repeated queries.
-   * 缓存 DOM 元素，减少重复查询
+   * Initializes modal interactions (clicks, keyboard, swipes).
+   * 初始化模态框交互
    */
-  function cacheUI() {
-    UI = {
-      html: document.documentElement,
-      loading: document.querySelector(".mh-loading"),
+  function initModal() {
+    if (!UI.modal) return;
 
-      navBurger: document.querySelector(".nav-burger"),
-      navLinks: document.querySelector(".nav-links"),
-      themeButton: document.querySelector(".nav-theme-toggle"),
+    // Event Delegation for Sponsors
+    document.addEventListener("click", (e) => {
+        const trigger = e.target.closest(".js-sponsor-trigger");
+        if (trigger) {
+            e.preventDefault();
+            const imgUrl = trigger.getAttribute("data-image");
+            openModal(imgUrl);
+        }
+    });
 
-      modal: document.querySelector(".mh-modal"),
-      modalMain: document.querySelector(".modal-main"),
-      modalImage: document.querySelector(".modal-img"),
-      modalStack: document.querySelector(".modal-stack"),
-      modalStackShow: null,
-      modalStackIndex: 0,
+    // Close on click outside
+    UI.modal.addEventListener("click", (e) => {
+      if (e.target === UI.modal) closeModal();
+    });
 
-      heroMotto: document.getElementById("hero-motto"),
-      snakeImage: document.getElementById("snake-img")
-    };
+    // Close on Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    });
+
+    // Mobile Stack Swipe Logic
+    if (UI.modalStack) {
+      const items = Array.from(UI.modalStack.querySelectorAll(".stack-img"));
+      const arrowLeft = UI.modalStack.querySelector(".modal-arrow-left");
+      const arrowRight = UI.modalStack.querySelector(".modal-arrow-right");
+
+      if (items.length) {
+        UI.modalStackItems = items;
+        UI.modalStackIndex = 0;
+
+        UI.modalStackShow = (i) => {
+          items.forEach((img, idx) => {
+            img.style.display = idx === i ? "block" : "none";
+          });
+        };
+
+        // Initialize first show
+        UI.modalStackShow(0);
+
+        const goNext = () => {
+          UI.modalStackIndex = (UI.modalStackIndex + 1) % items.length;
+          UI.modalStackShow(UI.modalStackIndex);
+        };
+
+        const goPrev = () => {
+          UI.modalStackIndex = (UI.modalStackIndex - 1 + items.length) % items.length;
+          UI.modalStackShow(UI.modalStackIndex);
+        };
+
+        // Touch events
+        let startX = 0;
+        let touching = false;
+        const threshold = 40;
+
+        UI.modalStack.addEventListener("touchstart", (e) => {
+          if (!e.touches || !e.touches[0]) return;
+          touching = true;
+          startX = e.touches[0].clientX;
+        });
+
+        UI.modalStack.addEventListener("touchend", (e) => {
+          if (!touching || !e.changedTouches || !e.changedTouches[0]) return;
+          touching = false;
+          const endX = e.changedTouches[0].clientX;
+          const diff = endX - startX;
+
+          if (Math.abs(diff) < threshold) return;
+          diff < 0 ? goNext() : goPrev();
+        });
+
+        // Arrow clicks
+        arrowLeft?.addEventListener("click", (e) => {
+          e.stopPropagation();
+          goPrev();
+        });
+
+        arrowRight?.addEventListener("click", (e) => {
+          e.stopPropagation();
+          goNext();
+        });
+      }
+    }
   }
 
   /* Initializers */
   /**
-   * Initializes the theme system.
-   * 初始化主题系统
+   * Initializes theme logic and binds click events.
+   * 初始化主题逻辑
    */
   function initTheme() {
-    let idx = parseInt(Storage.get("themeIndex")) || 0;
+    let idx = parseInt(Storage.get("MH_THEME_INDEX")) || 0;
     idx = applyTheme(idx);
     UI.themeButton?.addEventListener("click", () => {
       idx = applyTheme(idx + 1);
@@ -277,7 +357,7 @@ const SITE_CONFIG = {
   }
 
   /**
-   * Initializes the mobile navigation interaction.
+   * Initializes mobile navigation menu interactions.
    * 初始化移动端导航交互
    */
   function initMobileNav() {
@@ -318,72 +398,9 @@ const SITE_CONFIG = {
     });
   }
 
-  function initModalSwipe() {
-    if (!UI.modalStack) return;
-
-    const items = Array.from(UI.modalStack.querySelectorAll(".stack-img"));
-    const arrowLeft = UI.modalStack.querySelector(".modal-arrow-left");
-    const arrowRight = UI.modalStack.querySelector(".modal-arrow-right");
-    if (!items.length) return;
-
-    UI.modalStackIndex = 0;
-    UI.modalStackShow = (i) => {
-      items.forEach((img, idx) => {
-        img.style.display = idx === i ? "block" : "none";
-      });
-    };
-
-    UI.modalStackShow(UI.modalStackIndex);
-
-    const goNext = () => {
-      UI.modalStackIndex = (UI.modalStackIndex + 1) % items.length;
-      UI.modalStackShow(UI.modalStackIndex);
-    };
-
-    const goPrev = () => {
-      UI.modalStackIndex = (UI.modalStackIndex - 1 + items.length) % items.length;
-      UI.modalStackShow(UI.modalStackIndex);
-    };
-
-    let startX = 0;
-    let touching = false;
-    const threshold = 40;
-
-    UI.modalStack.addEventListener("touchstart", (e) => {
-      if (!e.touches || !e.touches[0]) return;
-      touching = true;
-      startX = e.touches[0].clientX;
-    });
-
-    UI.modalStack.addEventListener("touchend", (e) => {
-      if (!touching || !e.changedTouches || !e.changedTouches[0]) return;
-      touching = false;
-      const endX = e.changedTouches[0].clientX;
-      const diff = endX - startX;
-
-      if (Math.abs(diff) < threshold) return;
-
-      if (diff < 0) {
-        goNext();
-      } else {
-        goPrev();
-      }
-    });
-
-    arrowLeft?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      goPrev();
-    });
-
-    arrowRight?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      goNext();
-    });
-  }
-
   /**
-   * Initializes the typing effect for the motto.
-   * 初始化座右铭打字机效果
+   * Initializes the typewriter effect for the hero section motto.
+   * 初始化首页座右铭打字机效果
    */
   function initHeroTyping() {
     if (!UI.heroMotto) return;
@@ -421,25 +438,56 @@ const SITE_CONFIG = {
     });
   }
 
+  /**
+   * Updates the daily visitor count using localStorage.
+   * 基于 localStorage 的简单日访客计数器
+   */
+  function updateTodayVisitors() {
+    const el = document.getElementById(SITE_CONFIG.TODAY_VISITORS_ID);
+    if (!el) return;
+
+    const key = "MH_TODAY_VISIT";
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const todayStr = `${yyyy}-${mm}-${dd}`;
+
+    let data;
+    try {
+      data = JSON.parse(localStorage.getItem(key) || "{}");
+    } catch {
+      data = {};
+    }
+
+    if (!data || data.date !== todayStr) {
+      data = { date: todayStr, count: 0 };
+    }
+
+    data.count += 1;
+    
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {
+      console.warn("Visitor count storage failed");
+    }
+
+    el.textContent = data.count;
+  }
+
   /* Bootstrap */
   document.addEventListener("DOMContentLoaded", () => {
     cacheUI();
     initTheme();
     initMobileNav();
-    initModalSwipe();
+    initModal();
     initHeroTyping();
     updateTodayVisitors();
-
-    UI.modal?.addEventListener("click", (e) => {
-      if (e.target === UI.modal) closeModal();
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeModal();
-      }
-    });
   });
+
+  /* Loading Screen & Uptime */
+  setInterval(updateSiteUptime, 1000);
+  updateSiteUptime();
 
   window.addEventListener("load", () => {
     if (!UI.loading) return;

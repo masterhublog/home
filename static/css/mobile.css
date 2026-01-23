@@ -5,13 +5,15 @@
  * License: CC BY-NC 4.0
  * ========================================================= */
 
-/* =========================
-   Mobile Styles
-   Mobile layout (max-width: 800px)
-   ========================= */
+/* ==================================================
+   Mobile Styles (max-width: 800px)
+=================================================== */
 
 @media (max-width: 800px) {
-  /* Layout - Body Adjustments */
+  
+  /* ==================================================
+   Layout: Body & Global Overrides
+=================================================== */
   body {
     background-attachment: scroll;
     font-size: 14px;
@@ -27,52 +29,62 @@
     -webkit-backdrop-filter: none;
   }
 
-  /* Layout - Navigation (mh-nav, nav-container, nav-links) */
+  /* ==================================================
+   Layout: Navigation
+=================================================== */
   .mh-nav {
+    top: 16px;
     width: 95%;
     height: 56px;
-    top: 16px;
+    
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 
   .nav-container {
-    padding: 0 20px;
-    height: 56px;
     position: relative;
     z-index: var(--z-nav-container);
+    
+    height: 56px;
+    padding: 0 20px;
   }
 
   .nav-container .gradient-text {
     font-size: 18px;
   }
 
-  /* Component - Mobile Menu Panel (nav-links) */
+  /* ==================================================
+   Component: Mobile Menu (Nav Links)
+=================================================== */
   .nav-links {
-    position: absolute; /* 从 fixed 改为 absolute，相对于 nav-container */
-    top: 100%; /* 紧贴导航栏底部 */
-    right: 20px; /* 与右侧保持和 nav-burger 相同的边距 */
-    width: auto; /* 宽度由内容决定 */
-    min-width: 120px; /* 设置最小宽度，防止太窄点不到 */
-    white-space: nowrap; /* 强制文字不换行，确保宽度被内容撑开 */
-    height: auto;
-    background: var(--item-bg-color);
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    z-index: var(--z-nav-menu);
+    
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 10px;
     gap: 4px;
-
-    transform-origin: top right; /* 动画：下拉 + 缩放效果，从右上角展开 */
-    transform: translateY(-10px) scale(0.55);
+    
+    width: auto;
+    min-width: 120px;
+    height: auto;
+    padding: 10px;
+    
+    background: var(--item-bg-color);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    
+    white-space: nowrap;
     opacity: 0;
     pointer-events: none;
+    
+    /* Animation: Slide down + Scale from top-right */
+    transform-origin: top right;
+    transform: translateY(-10px) scale(0.55);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: var(--z-nav-menu);
   }
 
   .nav-links li {
@@ -81,17 +93,20 @@
 
   .nav-links a,
   .nav-theme-toggle {
+    position: relative;
+    z-index: var(--z-nav-item);
+    
     display: block;
     width: 100%;
     padding: 12px 10px;
-    font-size: 18px;
+    
     color: var(--main-text-color);
-    border-radius: 8px;
-    position: relative;
-    z-index: var(--z-nav-item);
-    text-decoration: none;
+    font-size: 18px;
     text-align: center;
+    text-decoration: none;
     white-space: nowrap;
+    
+    border-radius: 8px;
   }
 
   .nav-theme-toggle {
@@ -101,51 +116,57 @@
     -webkit-backdrop-filter: none;
   }
 
+  /* Active State Animations */
   .nav-active li {
     opacity: 1;
-    animation: navLinkFade 0.3s ease forwards;
+    animation: nav-link-fade 0.3s ease forwards;
   }
 
   .nav-links.nav-active {
     opacity: 1;
     transform: translateY(10px) scale(1) !important;
-
     pointer-events: auto;
   }
 
-  /* Component - Burger Menu (nav-burger) */
+  /* ==================================================
+   Component: Burger Menu
+=================================================== */
   .nav-burger {
     display: block;
     position: relative;
     z-index: var(--z-nav-burger);
   }
 
+  /* ==================================================
+   Layout: Main Structure
+=================================================== */
   .mh-layout {
-    padding-top: 50px;
     flex-direction: column;
+    padding-top: 50px;
   }
 
-  /* Layout - Hide Sidebar on Mobile */
+  /* Hide Sidebar on Mobile */
   .mh-sidebar {
     display: none;
   }
 
-  /* Layout - Content Full Width */
+  /* Full Width Content */
   .mh-content {
     width: 100%;
   }
 
-  /* Content - Hero Text (greeting & motto) */
+  /* ==================================================
+   Content: Hero Section
+=================================================== */
   .hero-greeting {
-    font-size: 10vw;
     margin: 2vw 0;
+    font-size: 10vw;
   }
 
   .hero-motto {
     font-size: 4vw;
   }
 
-  /* Content - Snake Graph & Actions Spacing */
   .snake {
     width: 100%;
   }
@@ -154,7 +175,9 @@
     margin-top: 3vw;
   }
 
-  /* Content - Site & Project Cards Layout */
+  /* ==================================================
+     Content: Cards (Site & Project)
+  =================================================== */
   .mh-site-card,
   .mh-project-card {
     padding: 10px;
@@ -166,9 +189,9 @@
   }
 
   .mh-project-card {
+    width: calc(100% - 30px);
     height: 110px;
     margin: 8px 15px;
-    width: calc(100% - 30px);
   }
 
   .mh-site-content,
@@ -181,6 +204,7 @@
     font-size: 13px;
   }
 
+  /* Disable hover effects on mobile */
   .mh-site-card:hover .mh-site-content h3,
   .mh-project-card:hover .mh-project-content h3 {
     font-size: 18px;
@@ -197,7 +221,9 @@
     display: none;
   }
 
-  /* Content - Skills Images (mobile vs pc) */
+  /* ==================================================
+     Content: Skills (Mobile Switch)
+  =================================================== */
   .mh-skills #skill-mobile {
     display: block;
   }
@@ -211,7 +237,9 @@
     max-width: 360px;
   }
 
-  /* Modal - Mobile Stack Layout */
+  /* ==================================================
+   Component: Modal (Mobile Stack)
+=================================================== */
   .mh-modal {
     padding: 16px;
   }

@@ -7,32 +7,67 @@
 
 /* ==================================================
    Theme Variables & Defaults
-================================================== */
+   
+   Naming Convention:
+   - Use kebab-case for all variables (e.g., --main-bg-color).
+   - Prefix with the component or property it affects.
+   - Use descriptive names for colors and values.
+=================================================== */
 :root {
-  --main-bg-color: url(../img/background.webp); /* 默认主背景 */
-  --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%); /* 标题渐变 */
-  --back-filter: 0px; /* 默认背景模糊 */
-  --back-filter-color: #00000000; /* 默认阴影遮罩 */
-  --card-filter: 0px; /* 默认卡片模糊 */
+  /* --- Backgrounds --- */
+  /* Main page background image */
+  --main-bg-color: url(../img/background.webp);
+  /* Gradient used for text or accents */
+  --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
+  
+  /* --- Filters & Effects --- */
+  /* Backdrop blur amount for the background overlay */
+  --back-filter: 0px;
+  /* Color overlay for the background */
+  --back-filter-color: #00000000;
+  /* Blur amount for glassmorphism cards */
+  --card-filter: 0px;
 
-  --main-text-color: #ffffff; /* 默认主文本颜色 */
-  --purple-text-color: #a0a0ff; /* 默认描述紫色文本 */
-  --item-title-color: #ffffff; /* 默认卡片标题 */
-  --item-text-color: #cccccc; /* 默认卡片文字 */
-  --footer-text-color: #ffffff; /* 默认底部文字 */
-  --text-bg-color: transparent; /* 文本背景色 */
+  /* --- Text Colors --- */
+  /* Primary text color */
+  --main-text-color: #ffffff;
+  /* Accent text color (often purple/blue) */
+  --purple-text-color: #a0a0ff;
+  /* Title color in cards */
+  --item-title-color: #ffffff;
+  /* Body text color in cards */
+  --item-text-color: #cccccc;
+  /* Footer text color */
+  --footer-text-color: #ffffff;
+  /* Background for selected text (if applicable) */
+  --text-bg-color: transparent;
 
-  --item-bg-color: #0000004d; /* 默认卡片背景 */
-  --item-hover-color: #33333366; /* 默认卡片 hover */
-  --left-tag-item: #0000002b; /* 默认左侧标签背景 */
+  /* --- Component Colors --- */
+  /* Background for general items/cards */
+  --item-bg-color: #0000004d;
+  /* Hover state for items */
+  --item-hover-color: #33333366;
+  /* Background for tags in the sidebar */
+  --left-tag-item: #0000002b;
 
-  --nav-bg-color: rgba(255, 255, 255, 0.2); /* 导航栏背景 */
-  --nav-border-color: rgba(255, 255, 255, 0.3); /* 导航栏边框 */
-  --nav-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* 导航栏阴影 */
-  --timeline-line-color: rgba(255, 255, 255, 0.15); /* 时间线竖线颜色 */
-  --fill: #ffffff; /* svg填充 */
+  /* --- Navigation --- */
+  /* Navbar background */
+  --nav-bg-color: rgba(255, 255, 255, 0.2);
+  /* Navbar border color */
+  --nav-border-color: rgba(255, 255, 255, 0.3);
+  /* Navbar shadow */
+  --nav-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  
+  /* --- Timeline & Icons --- */
+  /* Vertical line color in timeline */
+  --timeline-line-color: rgba(255, 255, 255, 0.15);
+  /* Fill color for SVG icons */
+  --fill: #ffffff;
 
+  /* --- Modal --- */
+  /* Full screen modal overlay background */
   --modal-bg-color: rgba(20, 20, 20, 0.6);
+  /* Modal content box background */
   --modal-main-bg: rgba(18, 18, 18, 0.96);
 
   /* Z-Index Layers */
@@ -48,141 +83,183 @@
   --z-loading: 999999;
 }
 
+/* ==================================================
+   Theme Definitions
+=================================================== */
 
-/* clear theme */
+/* --- Clear Theme (Default) --- */
 .theme-clear {
-  /* Uses default values */
+  /* Inherits default values from :root */
 }
 
-/* Dim original background */
+/* --- Dim Theme --- */
 .theme-dim {
   --main-text-color: #eeeeee;
   --purple-text-color: #747bff;
+  
   --item-bg-color: rgba(0, 0, 0, 0.22);
   --item-hover-color: rgba(51, 51, 51, 0.22);
   --item-text-color: #ffffff;
   --left-tag-item: rgba(27, 42, 57, 0.2);
+  
   --card-filter: 15px;
   --back-filter-color: rgba(0, 0, 0, 0.19);
+  
   --nav-bg-color: rgba(0, 0, 0, 0.2);
   --nav-border-color: rgba(255, 255, 255, 0.1);
+  
   --timeline-line-color: rgba(255, 255, 255, 0.1);
+  
+  --scrollbar-track-color: rgba(255, 255, 255, 0.1);
+
   --modal-bg-color: rgba(0, 0, 0, 0.65);
   --modal-main-bg: rgba(10, 10, 10, 0.98);
 }
 
-/* fresh theme */
+/* --- Fresh Theme --- */
 .theme-fresh {
   --main-text-color: #000000;
   --purple-text-color: #667eea;
   --text-bg-color: rgba(121, 163, 231, 0.5);
+  
   --item-bg-color: rgba(249, 250, 251, 0.42);
   --item-hover-color: rgba(244, 245, 246, 0.8);
   --item-title-color: #000000;
   --item-text-color: #494949;
+  
   --footer-text-color: #333333;
   --left-tag-item: #c7e1fa;
   --fill: #000000;
+  
   --nav-bg-color: rgba(255, 255, 255, 0.6);
   --nav-border-color: rgba(0, 0, 0, 0.05);
   --nav-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  
   --timeline-line-color: rgba(0, 0, 0, 0.1);
+  
   --modal-bg-color: rgba(0, 0, 0, 0.25);
   --modal-main-bg: rgba(255, 255, 255, 0.96);
 }
 
-/* blur theme */
+/* --- Blur Theme --- */
 .theme-blur {
   --main-text-color: #eeeeee;
   --purple-text-color: #a0a0ff;
+  
   --item-bg-color: rgba(0, 0, 0, 0.22);
   --item-hover-color: rgba(51, 51, 51, 0.22);
   --item-text-color: #ffffff;
+  
   --back-filter: 19px;
   --back-filter-color: rgba(0, 0, 0, 0.19);
+  
   --nav-bg-color: rgba(0, 0, 0, 0.2);
   --nav-border-color: rgba(255, 255, 255, 0.1);
+  
   --timeline-line-color: rgba(255, 255, 255, 0.15);
+  
   --modal-bg-color: rgba(0, 0, 0, 0.65);
   --modal-main-bg: rgba(10, 10, 10, 0.98);
 }
 
-/* sky theme */
+/* --- Sky Theme --- */
 .theme-sky {
   --main-bg-color: linear-gradient(135deg, #a2d1ff 0%, #e8f4ff 100%);
   --main-text-color: #000000;
   --purple-text-color: #4a90e2;
   --text-bg-color: rgba(196, 217, 251, 0.5);
+  
   --item-bg-color: rgba(249, 250, 251, 0.5);
   --item-hover-color: rgba(244, 245, 246, 0.8);
   --item-title-color: #000000;
   --item-text-color: #494949;
+  
   --footer-text-color: #222222;
   --left-tag-item: rgba(162, 209, 255, 0.3);
   --fill: #000000;
+  
   --nav-bg-color: rgba(255, 255, 255, 0.5);
   --nav-border-color: rgba(255, 255, 255, 0.6);
   --nav-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  
   --timeline-line-color: rgba(74, 144, 226, 0.3);
+  
   --modal-bg-color: rgba(0, 0, 0, 0.25);
   --modal-main-bg: rgba(255, 255, 255, 0.96);
 }
 
-/* white theme */
+/* --- White Theme --- */
 .theme-white {
   --main-bg-color: #ffffff;
   --main-text-color: #000000;
   --purple-text-color: #667eea;
   --text-bg-color: rgba(240, 243, 247, 0.5);
+  
   --item-bg-color: rgba(247, 247, 247, 0.8);
   --item-hover-color: rgba(244, 245, 246, 0.5);
   --item-title-color: #000000;
   --item-text-color: #494949;
+  
   --footer-text-color: #222222;
   --left-tag-item: rgba(230, 230, 230, 0.6);
   --fill: #000000;
+  
   --nav-bg-color: rgba(255, 255, 255, 0.9);
   --nav-border-color: #eaeaea;
   --nav-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  
   --timeline-line-color: #eaeaea;
+  
   --modal-bg-color: rgba(0, 0, 0, 0.18);
   --modal-main-bg: rgba(255, 255, 255, 0.98);
 }
 
-/* dark theme */
+/* --- Dark Theme --- */
 .theme-dark {
   --main-bg-color: #000000;
   --main-text-color: #ffffff;
   --purple-text-color: #a0a0ff;
   --text-bg-color: rgba(0, 0, 0, 0.25);
+  
   --item-bg-color: rgba(17, 17, 17, 0.9);
   --item-hover-color: rgba(51, 51, 51, 0.9);
   --item-title-color: #ffffff;
   --item-text-color: #cccccc;
+  
   --footer-text-color: #ffffff;
   --left-tag-item: rgba(34, 34, 34, 0.8);
   --fill: #ffffff;
+  
   --nav-bg-color: rgba(30, 30, 30, 0.8);
   --nav-border-color: rgba(255, 255, 255, 0.1);
   --nav-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  
   --timeline-line-color: rgba(255, 255, 255, 0.15);
+  
   --modal-bg-color: rgba(0, 0, 0, 0.75);
   --modal-main-bg: rgba(10, 10, 10, 0.98);
 }
 
-/* background filter */
+/* ==================================================
+   Theme Specific Overrides
+=================================================== */
+
+/* Remove backdrop filter for White Theme */
 .theme-white .mh-bg-filter {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   background: transparent;
 }
 
+/* Darker motto text for light themes */
 .theme-fresh .hero-motto,
 .theme-sky .hero-motto {
   color: #333333 !important;
 }
 
-/* mobile background */
+/* ==================================================
+   Mobile Background Overrides
+=================================================== */
 @media (max-width: 800px) {
   html,
   .theme-clear,
