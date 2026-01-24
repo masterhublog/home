@@ -41,6 +41,8 @@
   --footer-text-color: #ffffff;
   /* Background for selected text (if applicable) */
   --text-bg-color: transparent;
+  /* Motto text color */
+  --motto-color: #ffffff;
 
   /* --- Component Colors --- */
   /* Background for cards/containers */
@@ -272,12 +274,6 @@
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   background: transparent;
-}
-
-/* Darker motto text for light themes */
-.theme-fresh .hero-motto,
-.theme-sky .hero-motto {
-  color: #333333 !important;
 }
 
 /* ==================================================

@@ -134,50 +134,102 @@ button:focus-visible {
   justify-content: center;
   align-items: center;
   
-  background: var(--main-bg-color);
+  /* Cyberpunk Deep Space Background */
+  background: radial-gradient(circle at center, #1a1a2e 0%, #16213e 50%, #000000 100%);
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), 
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  perspective: 1000px;
 }
 
 .mh-loading.hide {
   opacity: 0;
-  transform: scale(0.92);
+  transform: scale(1.2);
   pointer-events: none;
 }
 
 .mh-loading-spinner {
   position: relative;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  transform-style: preserve-3d;
+  animation: mh-spin-core 2s linear infinite;
   
-  background: conic-gradient(
-    from 0deg,
-    var(--accent-color),
-    var(--gradient-accent, #3fd1ff),
-    var(--accent-color)
-  );
-  
-  animation: mh-spin 1s linear infinite, mh-progress 2.5s ease-in-out infinite;
+  /* Glowing Core */
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(0, 255, 255, 0.6) 15%, transparent 40%);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
 }
 
+/* Core Glow */
+.mh-loading-spinner::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  border-top-color: #00ffff;
+  border-bottom-color: #00ffff;
+  filter: drop-shadow(0 0 10px #00ffff);
+  animation: mh-spin-orbit-1 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+
+/* Outer Orbit */
 .mh-loading-spinner::after {
   content: "";
   position: absolute;
-  inset: 7px;
+  inset: 0;
   border-radius: 50%;
-  background: var(--spinner-center-bg, #ffffff);
+  border: 4px solid transparent;
+  border-left-color: #ff00ff;
+  border-right-color: #ff00ff;
+  filter: drop-shadow(0 0 10px #ff00ff);
+  animation: mh-spin-orbit-2 2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite reverse;
 }
 
-@keyframes mh-spin {
-  to { transform: rotate(360deg); }
+/* Loading Text */
+.mh-loading::after {
+  content: "SYSTEM INITIALIZING...";
+  position: absolute;
+  bottom: 25%;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+  animation: mh-text-pulse 2s ease-in-out infinite;
+  opacity: 0.8;
 }
 
-@keyframes mh-progress {
-  0%   { filter: brightness(0.9); }
-  50%  { filter: brightness(1.2); }
-  100% { filter: brightness(0.9); }
+@keyframes mh-text-pulse {
+  0%, 100% { opacity: 0.4; letter-spacing: 4px; }
+  50% { opacity: 1; letter-spacing: 6px; }
+}
+
+@keyframes mh-spin-core {
+  0% { transform: rotateZ(0deg); }
+  100% { transform: rotateZ(360deg); }
+}
+
+@keyframes mh-spin-orbit-1 {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  50% { transform: rotateX(180deg) rotateY(180deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+@keyframes mh-spin-orbit-2 {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  50% { transform: rotateX(-180deg) rotateY(90deg); }
+  100% { transform: rotateX(-360deg) rotateY(180deg); }
+}
+
+/* Fallback for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .mh-loading-spinner,
+  .mh-loading-spinner::before,
+  .mh-loading-spinner::after {
+    animation-duration: 10s;
+  }
 }
 
 /* ==================================================
@@ -882,10 +934,18 @@ a, button, .mh-site-card, .mh-project-card, .nav-theme-toggle, .hero-actions-ite
   width: 39px;
   height: 39px;
   transition: transform 0.4s ease;
+  animation: mh-float 3s ease-in-out infinite;
+}
+
+@keyframes mh-float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
 }
 
 .mh-site-card:hover img, .mh-project-card:hover img {
-  transform: rotate(50deg);
+  transform: scale(1.1) rotate(10deg);
+  animation-play-state: paused;
 }
 
 /* --- Skills --- */
@@ -941,57 +1001,105 @@ footer {
   width: 100vw;
   height: 100vh;
   
-  background: var(--modal-bg-color, rgba(20, 20, 20, 0.5));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   
+  opacity: 0;
   visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mh-modal.active {
+  opacity: 1;
   visibility: visible;
 }
 
 .modal-main {
+  position: relative;
   z-index: var(--z-index-modal-content);
   
   display: flex;
   justify-content: center;
   align-items: center;
   
-  width: 80%;
+  width: auto;
   max-width: 800px;
-  min-height: 500px;
+  max-height: 85vh;
+  min-width: 300px;
   
-  background-color: var(--modal-main-bg, #ffffff);
-  border-radius: 15px;
+  background: var(--card-bg-color);
+  
+  /* Glassmorphism Border */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  
+  border-radius: 24px;
+  
+  /* Enhanced Deep Shadow */
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    
   overflow: hidden;
   
-  transform: translateY(30%) scale(0.9);
-  transition: transform 0.2s linear;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .modal-main.active {
-  transform: translateY(0) scale(1);
+  transform: scale(1) translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  width: 36px;
+  height: 36px;
+  
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(4px);
+  
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 .modal-img {
-  width: 100%;
-  height: auto;
+  display: block;
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
 }
 
 /* Mobile Stack in Modal */
 .modal-stack {
   position: relative;
-  
-  padding: 20px 14px 16px;
-  background: var(--card-bg-color);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-  
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  width: 100%;
+  padding: 40px 20px 20px; /* Top padding for close button */
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  backdrop-filter: none;
 }
 
 .modal-stack-inner {
@@ -1023,41 +1131,53 @@ footer {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 5;
   
   display: flex;
   justify-content: center;
   align-items: center;
   
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   
-  background: rgba(0, 0, 0, 0.45);
-  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
   
   color: #ffffff;
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.modal-arrow-left { left: 6px; }
-.modal-arrow-right { right: 6px; }
+.modal-arrow:active {
+  transform: translateY(-50%) scale(0.9);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-arrow-left { left: 0; }
+.modal-arrow-right { right: 0; }
 
 .modal-hint {
   display: none;
   position: absolute;
-  top: 8px;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
   
-  padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 999px;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  padding: 6px 16px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   
-  color: #ffffff;
-  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 /* ==================================================

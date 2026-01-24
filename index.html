@@ -14,6 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 
   <!-- Primary Meta Tags -->
+  <!-- [CUSTOMIZE]: Change these meta tags to match your personal information -->
   <title>𝓜𝓪𝓼𝓽𝓮𝓻𝓱𝓾 | 个人主页</title>
   <meta name="title" content="MasterHu | 个人主页">
   <meta name="description" content="MasterHu 的个人主页 - 记录、分享、成长。让每一次技术探索和生活感悟都有迹可循。">
@@ -88,7 +89,8 @@
   </script>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./static/img/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="./static/svg/favicon.svg">
+  <link rel="alternate icon" href="./static/img/favicon.ico">
   <link rel="apple-touch-icon" href="./static/img/avatar.gif">
 
   <!-- Stylesheets -->
@@ -107,6 +109,7 @@
   <nav class="mh-nav">
     <div class="nav-container">
       <span class="gradient-text">MasterHu's Home</span>
+      <!-- [CUSTOMIZE]: Navigation Links -->
       <ul class="nav-links" aria-hidden="true">
         <li>
           <a href="https://blog.masterhu.com.cn" target="_blank" rel="noopener noreferrer">📖 博客</a>
@@ -154,8 +157,9 @@
             <use href="./static/svg/icons.svg#icon-secret"></use>
           </svg>Secret
         </div>
-        <div class="mh-bio-item">🏷️ Full Developer</div>
+        <div class="mh-bio-item">🏷️ Full Stack Developer</div>
       </div>
+      <!-- [CUSTOMIZE]: Tags Section -->
       <div class="mh-sidebar-section mh-tags">
         <div class="mh-tags-item">嵌入式</div>
         <div class="mh-tags-item">linux</div>
@@ -183,13 +187,15 @@
             <span id="mh-stats-site-uv"><i class="mh-inline-loading">Loading...</i></span>
           </dd>
         </div>
+
         <div class="mh-status-item">
-          <dt class="mh-status-title">📅 今日访客</dt>
+          <dt class="mh-status-title">🔥 访问热度</dt>
           <dd class="mh-status-text">
-            <span id="mh-stats-today"><i class="mh-inline-loading">Loading...</i></span>
+            <span id="mh-stats-page-pv"><i class="mh-inline-loading">Loading...</i></span>
           </dd>
         </div>
       </dl>
+      <!-- [CUSTOMIZE]: Timeline Section -->
       <div class="mh-sidebar-section mh-timeline">
         <ul class="mh-timeline-list">
           <li class="mh-timeline-item">
@@ -264,6 +270,7 @@
         </div>
       </header>
 
+      <!-- [CUSTOMIZE]: Site Cards (Blog, GitHub, etc.) -->
       <section class="mh-sections">
         <div class="mh-sections-title">
           <svg class="icon">
@@ -284,7 +291,7 @@
           <a class="mh-site-card" target="_blank" href="https://blog.masterhu.com.cn/message" rel="noopener noreferrer">
             <div class="mh-site-content">
               <h3>💬 留言板</h3>
-              <p>🤙 来聊聊呗。。。</p>
+              <p>🤙 欢迎留言交流</p>
             </div>
             <div class="mh-site-icon">
               <img src="./static/svg/message.svg" alt="Message Icon" loading="lazy" />
@@ -327,6 +334,9 @@
           </a>
         </div>
 
+        <!-- [CUSTOMIZE]: Skills Section (Powered by skillicons.dev) -->
+      <!-- Edit the 'i' parameter in the src URL to change icons -->
+      <section class="mh-sections">
         <div class="mh-sections-title">
           <svg class="icon">
             <use href="./static/svg/icons.svg#icon-skills"></use>
@@ -343,12 +353,13 @@
 
   <!-- footer -->
   <footer>
-    <p>Copyright &copy; <time datetime="2026">2026</time> By <a href="https://masterhu.com.cn/" aria-label="MasterHu">𝓜𝓪𝓼𝓽𝓮𝓻𝓱𝓾</a>. All Rights Reserved.</p>
+    <p>Copyright &copy; <time id="footer-year" datetime="2026">2026</time> By <a href="https://masterhu.com.cn/" aria-label="MasterHu">𝓜𝓪𝓼𝓽𝓮𝓻𝓱𝓾</a>. All Rights Reserved.</p>
   </footer>
 
   <!-- Modal for Images -->
   <div class="mh-modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-main">
+      <div class="modal-close" aria-label="Close modal">×</div>
       <div class="modal-stack">
         <div class="modal-hint">⟵ 左右滑动切换 ⟶</div>
         <div class="modal-stack-inner">

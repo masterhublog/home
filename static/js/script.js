@@ -10,8 +10,9 @@
 
   /* Console Banner & Signature */
   const CAT_STYLE = "color: #ff9ff3; font-family: monospace; font-weight: bold; line-height: 1.2;";
+  const currentYear = new Date().getFullYear();
   console.log(
-    "%cCopyright © 2026 masterhu.com.cn",
+    `%cCopyright © ${currentYear} masterhu.com.cn`,
     "background: linear-gradient(90deg, #ff00ff, #8e44ad); color: white; font-size: 20px; font-weight: bold; padding: 8px 20px; border-radius: 5px;"
   );
   console.log("%c      |\\      _,,,---,,_", CAT_STYLE);
@@ -69,7 +70,11 @@
     BIRTH_TIME: "2026/01/01 00:00:00",
     // 页面元素 ID 配置 (通常无需修改)
     UPTIME_RENDER_ID: "run-time",
-    TODAY_VISITORS_ID: "mh-today-visitors"
+    STATS_IDS: {
+      sitePV: "mh-stats-site-pv",
+      siteUV: "mh-stats-site-uv",
+      pagePV: "mh-stats-page-pv"
+    }
   };
 
   // Precompute timestamp to avoid parsing date repeatedly in the loop
@@ -276,6 +281,12 @@
       if (e.target === UI.modal) closeModal();
     });
 
+    // Close on button click
+    const closeBtn = UI.modal.querySelector(".modal-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", closeModal);
+    }
+
     // Close on Escape
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
@@ -442,39 +453,6 @@
     });
   }
 
-  /**
-   * Updates the daily visitor count using localStorage.
-   * 基于 localStorage 的简单日访客计数器
-   */
-  function updateTodayVisitors() {
-    const el = document.getElementById(SITE_CONFIG.TODAY_VISITORS_ID);
-    if (!el) return;
-
-    const key = "MH_TODAY_VISIT";
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
-    const todayStr = `${yyyy}-${mm}-${dd}`;
-
-    let data;
-    try {
-      data = JSON.parse(Storage.get(key) || "{}");
-    } catch {
-      data = {};
-    }
-
-    if (!data || data.date !== todayStr) {
-      data = { date: todayStr, count: 0 };
-    }
-
-    data.count += 1;
-    
-    Storage.set(key, JSON.stringify(data));
-
-    el.textContent = data.count;
-  }
-
   /* Bootstrap */
   document.addEventListener("DOMContentLoaded", () => {
     cacheUI();
@@ -483,7 +461,7 @@
     initModal();
     initHeroTyping();
     initAnalytics();
-    updateTodayVisitors();
+    updateFooterYear();
   });
 
   /* Analytics Adapter */
@@ -492,28 +470,91 @@
    * 初始化统计服务（适配器模式，解耦具体服务商）
    */
   function initAnalytics() {
+    // 1. Update local "Today Visitors" counter immediately
+    // updateTodayVisitors();
+
+    // 2. Adapter for Busuanzi (or other providers)
     // Current Provider: Busuanzi (不蒜子)
-    // Adapter logic to sync Busuanzi's DOM manipulation to our generic IDs
-    
     const loadBusuanzi = () => {
       if (window.analyticsLoaded) return;
       window.analyticsLoaded = true;
 
-      // 1. Create hidden proxy elements that Busuanzi expects
+      // Create hidden proxy elements that Busuanzi expects
       const proxyContainer = document.createElement("div");
       proxyContainer.style.display = "none";
       proxyContainer.setAttribute("aria-hidden", "true");
+      proxyContainer.id = "busuanzi_proxy";
       
+      // Mapping: Provider ID -> Generic Site ID
       const mappings = [
         { busuanzi: "busuanzi_value_site_pv", generic: SITE_CONFIG.STATS_IDS.sitePV },
-        { busuanzi: "busuanzi_value_site_uv", generic: SITE_CONFIG.STATS_IDS.siteUV }
+        { busuanzi: "busuanzi_value_site_uv", generic: SITE_CONFIG.STATS_IDS.siteUV },
+        { busuanzi: "busuanzi_value_page_pv", generic: SITE_CONFIG.STATS_IDS.pagePV }
       ];
 
       mappings.forEach(map => {
-        // Logic to sync Busuanzi elements with site elements
+        const span = document.createElement("span");
+        span.id = map.busuanzi;
+        proxyContainer.appendChild(span);
       });
+
+      document.body.appendChild(proxyContainer);
+
+      // Sync data from hidden proxy to visible generic elements
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === "childList" || mutation.type === "characterData") {
+            const targetId = mutation.target.id || mutation.target.parentElement.id;
+            const map = mappings.find(m => m.busuanzi === targetId);
+            if (map) {
+              const genericEl = document.getElementById(map.generic);
+              if (genericEl) {
+                genericEl.textContent = mutation.target.textContent;
+                // Remove loading spinner class if present
+                genericEl.classList.remove("mh-inline-loading");
+              }
+            }
+          }
+        });
+      });
+
+      mappings.forEach(map => {
+        const el = document.getElementById(map.busuanzi);
+        if (el) observer.observe(el, { childList: true, subtree: true, characterData: true });
+      });
+      
+      // Load the script dynamically
+      const script = document.createElement("script");
+      script.src = "//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
+      script.async = true;
+      script.referrerPolicy = "no-referrer-when-downgrade"; // Fix for some browser blocking
+      
+      // Error handling for analytics script
+      script.onerror = () => {
+        console.warn("Busuanzi analytics script failed to load. Some stats may be unavailable.");
+        // Fallback or cleanup if needed
+        const proxy = document.getElementById("busuanzi_proxy");
+        if (proxy) proxy.style.display = "none";
+      };
+
+      document.head.appendChild(script);
     };
+    
+    // Start loading immediately
     loadBusuanzi();
+  }
+
+  /**
+   * Updates the footer year dynamically.
+   * 动态更新页脚年份
+   */
+  function updateFooterYear() {
+    const el = document.getElementById("footer-year");
+    if (el) {
+      const year = new Date().getFullYear();
+      el.textContent = year;
+      el.setAttribute("datetime", String(year));
+    }
   }
 
   /* Loading Screen & Uptime */

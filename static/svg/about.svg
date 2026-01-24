@@ -1,9 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="39" height="39">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="gradAbout" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00c6ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0072ff;stop-opacity:1" />
+    <linearGradient id="grad-about" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bd34fe" />
+      <stop offset="50%" stop-color="#e0321b" />
+      <stop offset="100%" stop-color="#41d1ff" />
     </linearGradient>
   </defs>
-  <path fill="url(#gradAbout)" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+  <!-- Hexagon Shape -->
+  <path d="M32 6L54.5 19V45L32 58L9.5 45V19L32 6Z" fill="none" stroke="url(#grad-about)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Info 'i' -->
+  <circle cx="32" cy="22" r="3" fill="url(#grad-about)" />
+  <path d="M32 30V44" stroke="url(#grad-about)" stroke-width="3" stroke-linecap="round" />
 </svg>
