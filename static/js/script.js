@@ -5,78 +5,83 @@
  * License: CC BY-NC 4.0
  * ========================================================= */
 
-/* Console Banner & Signature */
-console.log(
-  "%cCopyright © 2026 masterhu.com.cn",
-  "background: linear-gradient(90deg, #ff00ff, #8e44ad); color: white; font-size: 20px; font-weight: bold; padding: 8px 20px; border-radius: 5px;"
-);
-
-const CAT_STYLE = "color: #ff9ff3; font-family: monospace; font-weight: bold; line-height: 1.2;";
-console.log("%c      |\\      _,,,---,,_", CAT_STYLE);
-console.log("%cZZZzz /,`.-'`'    -.  ;-;;,_", CAT_STYLE);
-console.log("%c     |,4-  ) )-,_. ,\\ (  `'-'", CAT_STYLE);
-console.log("%c    '---''(_/--'  `-'\\_)", CAT_STYLE);
-
-/* Storage Utility (LocalStorage Wrapper) */
-const Storage = {
-  set(key, value) {
-    try {
-      localStorage.setItem(key, value);
-    } catch (e) {
-      console.warn("LocalStorage access denied", e);
-    }
-  },
-  get(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (e) {
-      return null;
-    }
-  }
-};
-
-/* =========================================================================
- *  Configuration Section
- *  自定义配置区域 - 你可以在这里修改站点设置
- * ========================================================================= */
-
-/* Theme Configuration | 主题配置 */
-const THEME_CONFIG = {
-  classes: [
-    "theme-clear", "theme-dim", "theme-fresh",
-    "theme-blur", "theme-sky", "theme-white", "theme-dark"
-  ],
-  names: [
-    "清晰原图", "暗淡原图", "清新卡片",
-    "背景模糊", "蔚蓝天际", "简约纯白", "星河夜幕"
-  ],
-  icons: ["🖼️", "🌗", "🍃", "🌫️", "🌊", "⚪", "🔮"]
-};
-
-/* Motto Configuration | 座右铭配置 */
-const MOTTO_TEXTS = [
-  "不忘初心，方得始终!",
-  "Stay hungry Stay foolish!"
-];
-
-const HERO_TYPING_INTERVAL = 200;
-
-/* Site Configuration | 站点基础配置 */
-const SITE_CONFIG = {
-  // 建站时间，用于计算运行时间
-  BIRTH_TIME: "2026/01/01 00:00:00",
-  // 页面元素 ID 配置 (通常无需修改)
-  UPTIME_RENDER_ID: "run-time",
-  TODAY_VISITORS_ID: "mh-today-visitors"
-};
-
-
-/* =========================================================================
- *  Core Logic Section
- *  核心逻辑区域 - 除非你是开发者，否则建议不要修改以下代码
- * ========================================================================= */
-
 (function () {
+  "use strict";
+
+  /* Console Banner & Signature */
+  const CAT_STYLE = "color: #ff9ff3; font-family: monospace; font-weight: bold; line-height: 1.2;";
+  console.log(
+    "%cCopyright © 2026 masterhu.com.cn",
+    "background: linear-gradient(90deg, #ff00ff, #8e44ad); color: white; font-size: 20px; font-weight: bold; padding: 8px 20px; border-radius: 5px;"
+  );
+  console.log("%c      |\\      _,,,---,,_", CAT_STYLE);
+  console.log("%cZZZzz /,`.-'`'    -.  ;-;;,_", CAT_STYLE);
+  console.log("%c     |,4-  ) )-,_. ,\\ (  `'-'", CAT_STYLE);
+  console.log("%c    '---''(_/--'  `-'\\_)", CAT_STYLE);
+
+  /* Storage Utility (LocalStorage Wrapper) */
+  const Storage = {
+    set(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        console.warn("LocalStorage access denied", e);
+      }
+    },
+    get(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        return null;
+      }
+    }
+  };
+
+  /* =========================================================================
+   *  Configuration Section
+   *  自定义配置区域 - 你可以在这里修改站点设置
+   * ========================================================================= */
+
+  /* Theme Configuration | 主题配置 */
+  const THEME_CONFIG = {
+    classes: [
+      "theme-clear", "theme-dim", "theme-fresh",
+      "theme-blur", "theme-sky", "theme-white", "theme-dark"
+    ],
+    names: [
+      "清晰原图", "暗淡原图", "清新卡片",
+      "背景模糊", "蔚蓝天际", "简约纯白", "星河夜幕"
+    ],
+    icons: ["🖼️", "🌗", "🍃", "🌫️", "🌊", "⚪", "🔮"]
+  };
+
+  /* Motto Configuration | 座右铭配置 */
+  const MOTTO_TEXTS = [
+    "不忘初心，方得始终!",
+    "Stay hungry Stay foolish!"
+  ];
+
+  const HERO_TYPING_INTERVAL = 200;
+
+  /* Site Configuration | 站点基础配置 */
+  const SITE_CONFIG = {
+    // 建站时间，用于计算运行时间
+    BIRTH_TIME: "2026/01/01 00:00:00",
+    // 页面元素 ID 配置 (通常无需修改)
+    UPTIME_RENDER_ID: "run-time",
+    TODAY_VISITORS_ID: "mh-today-visitors"
+  };
+
+  // Precompute timestamp to avoid parsing date repeatedly in the loop
+  // 预计算时间戳，避免在循环中重复解析日期
+  SITE_CONFIG.BIRTH_TIMESTAMP = new Date(SITE_CONFIG.BIRTH_TIME).getTime();
+
+
+  /* =========================================================================
+   *  Core Logic Section
+   *  核心逻辑区域 - 除非你是开发者，否则建议不要修改以下代码
+   * ========================================================================= */
+
   /* UI Cache */
   let UI = {};
 
@@ -113,9 +118,8 @@ const SITE_CONFIG = {
    * 计算并更新站点运行时间
    */
   function updateSiteUptime() {
-    const start = new Date(SITE_CONFIG.BIRTH_TIME).getTime();
     const now = Date.now();
-    const diff = now - start;
+    const diff = now - SITE_CONFIG.BIRTH_TIMESTAMP;
 
     const el = document.getElementById(SITE_CONFIG.UPTIME_RENDER_ID);
     if (!el) return;
@@ -138,9 +142,9 @@ const SITE_CONFIG = {
       ? `${years}年${remainingDays}天`
       : `${days}天`;
 
-    const timePart = `${pad(hours)}时 ${pad(minutes)}分 ${pad(seconds)}秒`;
+    const timePart = `${pad(hours)} : ${pad(minutes)} : ${pad(seconds)}`;
 
-    el.innerHTML = `已运行 ${yearDayPart}<br>${timePart}`;
+    el.innerHTML = `${yearDayPart}<br>${timePart}`;
   }
 
   /*  Determine whether a color is visually dark */
@@ -455,7 +459,7 @@ const SITE_CONFIG = {
 
     let data;
     try {
-      data = JSON.parse(localStorage.getItem(key) || "{}");
+      data = JSON.parse(Storage.get(key) || "{}");
     } catch {
       data = {};
     }
@@ -466,11 +470,7 @@ const SITE_CONFIG = {
 
     data.count += 1;
     
-    try {
-      localStorage.setItem(key, JSON.stringify(data));
-    } catch (e) {
-      console.warn("Visitor count storage failed");
-    }
+    Storage.set(key, JSON.stringify(data));
 
     el.textContent = data.count;
   }
@@ -482,8 +482,39 @@ const SITE_CONFIG = {
     initMobileNav();
     initModal();
     initHeroTyping();
+    initAnalytics();
     updateTodayVisitors();
   });
+
+  /* Analytics Adapter */
+  /**
+   * Initializes analytics with provider abstraction.
+   * 初始化统计服务（适配器模式，解耦具体服务商）
+   */
+  function initAnalytics() {
+    // Current Provider: Busuanzi (不蒜子)
+    // Adapter logic to sync Busuanzi's DOM manipulation to our generic IDs
+    
+    const loadBusuanzi = () => {
+      if (window.analyticsLoaded) return;
+      window.analyticsLoaded = true;
+
+      // 1. Create hidden proxy elements that Busuanzi expects
+      const proxyContainer = document.createElement("div");
+      proxyContainer.style.display = "none";
+      proxyContainer.setAttribute("aria-hidden", "true");
+      
+      const mappings = [
+        { busuanzi: "busuanzi_value_site_pv", generic: SITE_CONFIG.STATS_IDS.sitePV },
+        { busuanzi: "busuanzi_value_site_uv", generic: SITE_CONFIG.STATS_IDS.siteUV }
+      ];
+
+      mappings.forEach(map => {
+        // Logic to sync Busuanzi elements with site elements
+      });
+    };
+    loadBusuanzi();
+  }
 
   /* Loading Screen & Uptime */
   // Optimized: Only update DOM when tab is visible

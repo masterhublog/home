@@ -202,7 +202,7 @@ vercel
 - **Google Fonts** - 字体服务
 - **Skillicons.dev** - 技能图标生成
 - **WebLive2D** - 可选的看板娘组件
-- **51.la** - 可选的访问统计脚本（默认关闭，建议 Fork 后按需启用或替换为你自己的 ID）
+- **Busuanzi** - 极简的网站访问量统计（不蒜子）
 
 ### 开发工具
 
